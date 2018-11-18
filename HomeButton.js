@@ -1,5 +1,4 @@
 import React from "react";
-import {Alert} from 'react-native';
 import {Button} from "react-native-elements";
 
 export default class HomeButton extends React.Component {
@@ -34,7 +33,7 @@ export default class HomeButton extends React.Component {
                 containerStyle={{ marginTop: 20 }}
                 title={this.props.title}
                 onPress={() => {
-                    Alert.alert('Le diste a '+this.props.title);
+                    this.props.onPress(this.props.screen);
                 }}
             />
         )
