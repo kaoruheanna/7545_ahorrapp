@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, Text, View, Alert} from 'react-native';
-import { Button } from 'react-native-elements';
+import {StyleSheet, Text, View} from 'react-native';
+import HomeButton from './HomeButton.js';
 
 export default class App extends React.Component {
     render() {
@@ -9,69 +9,15 @@ export default class App extends React.Component {
                 <Text>Hola!</Text>
                 <View style={styles.homeButtonsArea}>
                     <View style={styles.homeButtonsColumn}>
-                        <Button buttonStyle={{
-                            backgroundColor: "rgba(92, 99,216, 1)",
-                            width: 120,
-                            height: 45,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            borderRadius: 5
-                        }} containerStyle={{ marginTop: 20 }} title="Ingresos Fijos" onPress={() => {
-                            Alert.alert('Le diste a ingresos fijos');
-                        }}/>
-                        <Button buttonStyle={{
-                            backgroundColor: "rgba(92, 99,216, 1)",
-                            width: 120,
-                            height: 70,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            borderRadius: 5
-                        }} containerStyle={{ marginTop: 20 }} title="Ingresos Variables" onPress={() => {
-                            Alert.alert('Le diste a ingresos variables');
-                        }}/>
-                        <Button buttonStyle={{
-                            backgroundColor: "rgba(92, 99,216, 1)",
-                            width: 120,
-                            height: 70,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            borderRadius: 5
-                        }} containerStyle={{ marginTop: 20 }} title="Balanza" onPress={() => {
-                            Alert.alert('Le diste a balanza');
-                        }}/>
+                        <HomeButton title="Fijos" type="income"/>
+                        <HomeButton title="Variables" type="income"/>
+                        <HomeButton title="Balanza" type="balance"/>
                     </View>
 
                     <View style={styles.homeButtonsColumn}>
-                        <Button buttonStyle={{
-                            backgroundColor: "rgba(92, 99,216, 1)",
-                            width: 120,
-                            height: 70,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            borderRadius: 5
-                        }} containerStyle={{ marginTop: 20 }} title="Gastos Fijos" onPress={() => {
-                            Alert.alert('Le diste a gastos fijos');
-                        }}/>
-                        <Button buttonStyle={{
-                            backgroundColor: "rgba(92, 99,216, 1)",
-                            width: 120,
-                            height: 70,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            borderRadius: 5
-                        }} containerStyle={{ marginTop: 20 }} title="Gastos Variables" onPress={() => {
-                            Alert.alert('Le diste a gastos variables');
-                        }}/>
-                        <Button buttonStyle={{
-                            backgroundColor: "rgba(92, 99,216, 1)",
-                            width: 120,
-                            height: 70,
-                            borderColor: "transparent",
-                            borderWidth: 0,
-                            borderRadius: 5
-                        }} containerStyle={{ marginTop: 20 }} title="Consejos" onPress={() => {
-                            Alert.alert('Le diste a consejos');
-                        }}/>
+                        <HomeButton title="Fijos" type="expenditure"/>
+                        <HomeButton title="Variables" type="expenditure"/>
+                        <HomeButton title="Consejos" type="info"/>
                     </View>
                 </View>
             </View>
