@@ -1,15 +1,21 @@
 import React from 'react';
-import HomeScreen from './HomeScreen.js';
+import HomeScreen from './screens/HomeScreen.js';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import FixedIncomeScreen from "./FixedIncomeScreen";
+import FixedIncomeScreen from "./screens/FixedIncomeScreen";
+import AdvicesScreen from "./screens/AdvicesScreen";
+import FixedExpenditureScreen from "./screens/FixedExpenditureScreen";
+import VariableExpenditureScreen from "./screens/VariableExpenditureScreen";
+import VariableIncomeScreen from "./screens/VariableIncomeScreen";
+import BalanceScreen from "./screens/BalanceScreen";
 
 const AppNavigator = createStackNavigator({
-    Home: {
-        screen: HomeScreen
-    },
-    FixedIncome: {
-        screen: FixedIncomeScreen
-    }
+    Home: { screen: HomeScreen },
+    Advices: { screen: AdvicesScreen },
+    Balance: { screen: BalanceScreen },
+    FixedExpenditure: { screen: FixedExpenditureScreen },
+    FixedIncome: { screen: FixedIncomeScreen },
+    VariableExpenditure: { screen: VariableExpenditureScreen },
+    VariableIncome: { screen: VariableIncomeScreen },
 }, {
     initialRouteName: 'Home',
 });

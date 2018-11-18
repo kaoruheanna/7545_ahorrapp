@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, Button, View} from 'react-native';
-import HomeButton from './HomeButton.js';
+import HomeButton from '../components/HomeButton.js';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 
@@ -20,29 +20,22 @@ export default class HomeScreen extends React.Component {
     };
 
     render() {
-        // const {navigate} = this.props.navigation;
 
         return (
             <View style={styles.container}>
                 <View style={styles.homeButtonsArea}>
                     <View style={styles.homeButtonsColumn}>
                         <HomeButton title="Fijos" type="income" screen="FixedIncome" onPress={this.goToScreen}/>
-                        {/*<HomeButton title="Variables" type="income"/>*/}
-                        {/*<HomeButton title="Balanza" type="balance"/>*/}
+                        <HomeButton title="Variables" type="income" screen="VariableIncome" onPress={this.goToScreen}/>
+                        <HomeButton title="Balanza" type="balance" screen="Balance" onPress={this.goToScreen}/>
                     </View>
 
                     <View style={styles.homeButtonsColumn}>
-                        {/*<HomeButton title="Fijos" type="expenditure"/>*/}
-                        {/*<HomeButton title="Variables" type="expenditure"/>*/}
-                        {/*<HomeButton title="Consejos" type="info"/>*/}
+                        <HomeButton title="Fijos" type="expenditure" screen="FixedExpenditure" onPress={this.goToScreen}/>
+                        <HomeButton title="Variables" type="expenditure" screen="VariableExpenditure" onPress={this.goToScreen}/>
+                        <HomeButton title="Consejos" type="info" screen="Advices" onPress={this.goToScreen}/>
                     </View>
                 </View>
-                <Button
-                    title="Go to asdasd"
-                    onPress={() => {
-                        this.goToScreen('FixedIncome');
-                    }}
-                />
             </View>
         );
     }

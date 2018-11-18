@@ -1,17 +1,17 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, Text, View} from 'react-native';
 import {NavigationActions, StackActions} from "react-navigation";
 
-export default class FixedIncomeScreen extends React.Component {
+export default class VariableIncomeScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Ingreso Fijo',
+        title: 'Ingresos variables',
     };
 
     render() {
         return (
             <View>
-                <Text> Esta es la pantalla de ingresos fijos </Text>
+                <Text> Esta es la pantalla de ingresos variables </Text>
 
                 <Button
                     title="Go to Home"
