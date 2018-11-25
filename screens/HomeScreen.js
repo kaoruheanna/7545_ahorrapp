@@ -11,12 +11,7 @@ export default class HomeScreen extends React.Component {
     };
 
     goToScreen = (screenName) => {
-        this.props.navigation.dispatch(StackActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({ routeName: screenName })
-            ],
-        }))
+        this.props.navigation.navigate(screenName);
     };
 
     render() {

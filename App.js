@@ -18,6 +18,15 @@ const AppNavigator = createStackNavigator({
     VariableIncome: { screen: VariableIncomeScreen },
 }, {
     initialRouteName: 'Home',
+    defaultNavigationOptions: {
+        headerStyle: {
+            backgroundColor: '#f4511e',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            fontWeight: 'bold',
+        },
+    },
 });
 
 export default createAppContainer(AppNavigator);
