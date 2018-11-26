@@ -2,6 +2,8 @@ import React from 'react';
 import {Button, Text, View} from 'react-native';
 import t from 'tcomb-form-native';
 import moment from 'moment';
+import { StorageService } from "../StorageService";
+
 
 const Form = t.form.Form;
 
@@ -70,7 +72,7 @@ export default class FixedIncomeScreen extends React.Component {
     onPress = () => {
         var value = this.refs.form.getValue();
         if (value) {
-            console.log("value: ",this.state);
+            StorageService.saveFixedIncome(value);
         }
     };
 
