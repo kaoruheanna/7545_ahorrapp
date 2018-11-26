@@ -4,6 +4,7 @@ import t from 'tcomb-form-native';
 import moment from 'moment';
 import { StorageService } from "../StorageService";
 import cloneDeep from 'lodash/cloneDeep';
+import DropdownAlert from 'react-native-dropdownalert';
 
 const Form = t.form.Form;
 
@@ -24,17 +25,18 @@ const initState = {
 };
 
 var options = {
-    auto: 'placeholders',
     fields: {
         money: {
-            label: 'Monto'
+            label: 'Monto',
+            placeholder: '$',
         },
         category: {
             label: 'Categoría',
-            nullOption: false
+            nullOption: false,
         },
         concept: {
-            label: 'Concepto'
+            label: 'Concepto',
+            placeholder: '',
         },
         since: {
             label: 'Desde',
@@ -82,6 +84,7 @@ export default class FixedIncomeScreen extends React.Component {
         if (value) {
             StorageService.saveFixedIncome(value);
             this.clearForm();
+            this.dropdown.alertWithType('success', 'Guardado!', "");
         }
     };
 
@@ -103,6 +106,7 @@ export default class FixedIncomeScreen extends React.Component {
                 />
 
                 <Button title="Guardar" onPress={this.onPress}/>
+                <DropdownAlert ref={ref => this.dropdown = ref} />
             </View>
         );
     }
