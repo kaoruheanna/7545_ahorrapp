@@ -5,9 +5,6 @@ export class StorageService {
     static addMovement = async (key, movement) => {
         try {
             let movements = await StorageService.getMovemements(key);
-
-            console.log("movements:",movements);
-
             movements.push(movement);
             await AsyncStorage.setItem(key, JSON.stringify(movements));
         } catch (error) {
@@ -24,9 +21,9 @@ export class StorageService {
         }
     };
 
-    static saveFixedIncome = (income) => {
+    static saveFixedIncome = async (income) => {
         console.log("llame a saveFixedIncome:", income);
-        StorageService.addMovement('fixed_income', income);
+        await StorageService.addMovement('fixed_income', income);
     };
 
     static getIncomes = async () => {

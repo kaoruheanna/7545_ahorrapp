@@ -3,7 +3,7 @@ import {Button, Text, View} from 'react-native';
 import t from 'tcomb-form-native';
 import moment from 'moment';
 import { StorageService } from "../StorageService";
-
+import cloneDeep from 'lodash/cloneDeep';
 
 const Form = t.form.Form;
 
@@ -12,6 +12,16 @@ const Category = t.enums({
     'Honorarios': 'Honorarios',
     'Otros': 'Otros'
 }, 'Category');
+
+const initState = {
+    value: {
+        money: null,
+        category: 'Sueldo',
+        concept: '',
+        since: null,
+        until: null,
+    }
+};
 
 var options = {
     auto: 'placeholders',
@@ -57,23 +67,26 @@ export default class FixedIncomeScreen extends React.Component {
         title: 'Ingreso Fijo',
     };
 
-    state = {
-        value: {
-            money: null,
-            category: 'Sueldo',
-            concept: '',
-        }
-    };
+    constructor(props) {
+        super(props);
+        this.state = cloneDeep(initState);
+        console.log("constructor:", this.state);
+    }
 
     onChange = (value) => {
-        this.state.value = value;
+        this.setState({ value });
     };
 
     onPress = () => {
         var value = this.refs.form.getValue();
         if (value) {
             StorageService.saveFixedIncome(value);
+            this.clearForm();
         }
+    };
+
+    clearForm = () => {
+        this.setState(cloneDeep(initState));
     };
 
     render() {
@@ -85,7 +98,7 @@ export default class FixedIncomeScreen extends React.Component {
                     ref="form"
                     type={FixedIncome}
                     value={this.state.value}
-                    onChange={this.onChange}
+                    onChange={this.onChange.bind(this)}
                     options={options}
                 />
 
