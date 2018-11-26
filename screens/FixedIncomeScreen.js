@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Text, View} from 'react-native';
+import {Button, View, StyleSheet} from 'react-native';
 import t from 'tcomb-form-native';
 import moment from 'moment';
 import { StorageService } from "../StorageService";
@@ -7,6 +7,9 @@ import cloneDeep from 'lodash/cloneDeep';
 import DropdownAlert from 'react-native-dropdownalert';
 
 const Form = t.form.Form;
+Form.stylesheet.dateValue.normal.borderColor = '#d0d2d3';
+Form.stylesheet.dateValue.normal.borderRadius = 4;
+Form.stylesheet.dateValue.normal.borderWidth = 1;
 
 const Category = t.enums({
     'Sueldo': 'Sueldo',
@@ -43,6 +46,8 @@ var options = {
             mode: 'date',
             config: {
                 format: (date) => moment(date).format('DD-MM'),
+                defaultValueText: " ",
+                dialogMode: "spinner",
             },
         },
         until: {
@@ -50,6 +55,8 @@ var options = {
             mode: 'date',
             config: {
                 format: (date) => moment(date).format('DD-MM'),
+                defaultValueText: " ",
+                dialogMode: "calendar",
             },
         }
     }
@@ -63,6 +70,14 @@ const FixedIncome = t.struct({
     until: t.Date,
 });
 
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 20,
+    }
+});
+
 export default class FixedIncomeScreen extends React.Component {
 
     static navigationOptions = {
@@ -72,7 +87,6 @@ export default class FixedIncomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = cloneDeep(initState);
-        console.log("constructor:", this.state);
     }
 
     onChange = (value) => {
@@ -95,17 +109,16 @@ export default class FixedIncomeScreen extends React.Component {
     render() {
         return (
             <View>
-                <Text> Esta es la pantalla de ingresos fijos </Text>
-
-                <Form
-                    ref="form"
-                    type={FixedIncome}
-                    value={this.state.value}
-                    onChange={this.onChange.bind(this)}
-                    options={options}
-                />
-
-                <Button title="Guardar" onPress={this.onPress}/>
+                <View style={styles.container}>
+                    <Form
+                        ref="form"
+                        type={FixedIncome}
+                        value={this.state.value}
+                        onChange={this.onChange.bind(this)}
+                        options={options}
+                    />
+                    <Button title="Guardar" onPress={this.onPress} styles={styles.container}/>
+                </View>
                 <DropdownAlert ref={ref => this.dropdown = ref} />
             </View>
         );
