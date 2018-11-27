@@ -26,10 +26,19 @@ export class StorageService {
         await StorageService.addMovement('fixed_income', income);
     };
 
+    static saveVariableIncome = async (income) => {
+        console.log("llame a saveVariableIncome:", income);
+        await StorageService.addMovement('variable_income', income);
+    };
+
     static getIncomes = async () => {
         const fixedIncomes = await StorageService.getMovemements('fixed_income');
         return fixedIncomes;
     }
 
+    static saveFixedExpenditure = async (expenditure) => {
+        console.log("llame a saveFixedExpenditure:", expenditure);
+        await StorageService.addMovement('fixed_expenditure', expenditure);
+    };
 
 }

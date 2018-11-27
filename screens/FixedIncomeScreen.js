@@ -56,7 +56,7 @@ var options = {
             config: {
                 format: (date) => moment(date).format('DD-MM'),
                 defaultValueText: " ",
-                dialogMode: "calendar",
+                dialogMode: "spinner",
             },
         }
     }
