@@ -52,7 +52,7 @@ var options = {
     }
 };
 
-const FixedIncome = t.struct({
+const VariableIncome = t.struct({
     money: t.Number,
     category: Category,
     concept: t.maybe(t.String),
@@ -101,7 +101,7 @@ export default class VariableIncomeScreen extends React.Component {
                 <View style={styles.container}>
                     <Form
                         ref="form"
-                        type={FixedIncome}
+                        type={VariableIncome}
                         value={this.state.value}
                         onChange={this.onChange.bind(this)}
                         options={options}

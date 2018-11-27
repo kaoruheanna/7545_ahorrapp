@@ -22,12 +22,10 @@ export class StorageService {
     };
 
     static saveFixedIncome = async (income) => {
-        console.log("llame a saveFixedIncome:", income);
         await StorageService.addMovement('fixed_income', income);
     };
 
     static saveVariableIncome = async (income) => {
-        console.log("llame a saveVariableIncome:", income);
         await StorageService.addMovement('variable_income', income);
     };
 
@@ -37,8 +35,11 @@ export class StorageService {
     }
 
     static saveFixedExpenditure = async (expenditure) => {
-        console.log("llame a saveFixedExpenditure:", expenditure);
         await StorageService.addMovement('fixed_expenditure', expenditure);
+    };
+
+    static saveVariableExpenditure = async (expenditure) => {
+        await StorageService.addMovement('variable_expenditure', expenditure);
     };
 
 }
