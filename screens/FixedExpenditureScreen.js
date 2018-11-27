@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
     }
 });
+
 export default class FixedExpenditureScreen extends React.Component {
 
     static navigationOptions = {
