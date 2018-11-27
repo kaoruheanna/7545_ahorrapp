@@ -1,4 +1,5 @@
 import { AsyncStorage } from "react-native"
+import concat from 'lodash/concat'
 
 export class StorageService {
 
@@ -31,7 +32,8 @@ export class StorageService {
 
     static getIncomes = async () => {
         const fixedIncomes = await StorageService.getMovemements('fixed_income');
-        return fixedIncomes;
+        const variableIncomes = await StorageService.getMovemements('variable_income');
+        return concat(fixedIncomes, variableIncomes)
     }
 
     static saveFixedExpenditure = async (expenditure) => {
@@ -42,4 +44,9 @@ export class StorageService {
         await StorageService.addMovement('variable_expenditure', expenditure);
     };
 
+    static getExpenditures = async () => {
+        const fixedExpenditures = await StorageService.getMovemements('fixed_expenditure');
+        const variableExpenditures = await StorageService.getMovemements('variable_expenditure');
+        return concat(fixedExpenditures, variableExpenditures)
+    }
 }

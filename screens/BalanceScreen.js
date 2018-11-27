@@ -2,6 +2,7 @@ import React from 'react';
 import {Button, Text, View} from 'react-native';
 import {NavigationActions, StackActions} from "react-navigation";
 import { StorageService } from "../StorageService";
+import cloneDeep from "lodash/cloneDeep";
 
 export default class BalanceScreen extends React.Component {
 
@@ -9,19 +10,40 @@ export default class BalanceScreen extends React.Component {
         title: 'Balanza',
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            totalIncomes: 0,
+            totalExpenditures: 0
+        };
+    }
+
     getIncomes = async () => {
-        console.log("tratando de obtener los incomes");
         const incomes = await StorageService.getIncomes();
-        console.log("incomes guardados: ", incomes);
-        return incomes;
+        const totalIncomes = incomes.reduce((carry, income) => {
+            return carry + income.money;
+        }, 0);
+        this.setState({ totalIncomes });
+    };
+
+    getExpenditures = async () => {
+        const expenditures = await StorageService.getExpenditures();
+        const totalExpenditures = expenditures.reduce((carry, income) => {
+            return carry + income.money;
+        }, 0);
+        this.setState({ totalExpenditures });
     };
 
     render() {
         this.getIncomes();
+        this.getExpenditures();
 
         return (
             <View>
                 <Text> Esta es la pantalla de balanza </Text>
+
+                <Text>Total Incomes: {this.state.totalIncomes}</Text>
+                <Text>Total Expenditures: {this.state.totalExpenditures}</Text>
 
                 <Button
                     title="Go to Home"
