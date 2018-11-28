@@ -6,7 +6,14 @@ import cloneDeep from "lodash/cloneDeep";
 
 export default class BalanceScreen extends React.Component {
 
-    static navigationOptions = {
+    componentDidMount() {
+        this._isMounted = true
+    }
+    componentWillUnmount() {
+      this._isMounted = false
+    }
+
+  static navigationOptions = {
         title: 'Balanza',
     };
 
@@ -16,22 +23,27 @@ export default class BalanceScreen extends React.Component {
             totalIncomes: 0,
             totalExpenditures: 0
         };
+        this._isMounted = false;
     }
 
     getIncomes = async () => {
         const incomes = await StorageService.getIncomes();
-        const totalIncomes = incomes.reduce((carry, income) => {
+        if (this._isMounted) {
+          const totalIncomes = incomes.reduce((carry, income) => {
             return carry + income.money;
-        }, 0);
-        this.setState({ totalIncomes });
+          }, 0);
+          this.setState({totalIncomes});
+        }
     };
 
     getExpenditures = async () => {
         const expenditures = await StorageService.getExpenditures();
-        const totalExpenditures = expenditures.reduce((carry, income) => {
+        if (this._isMounted) {
+          const totalExpenditures = expenditures.reduce((carry, income) => {
             return carry + income.money;
-        }, 0);
-        this.setState({ totalExpenditures });
+          }, 0);
+          this.setState({totalExpenditures});
+        }
     };
 
     render() {
