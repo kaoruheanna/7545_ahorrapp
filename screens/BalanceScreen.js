@@ -1,16 +1,16 @@
 import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {StorageService} from "../StorageService";
+import { Icon } from 'react-native-elements'
+
 
 const styles = StyleSheet.create({
     mainView: {
-        flex: 1,
         flexDirection: 'column',
         backgroundColor:"yellow",
         alignItems: 'center',
     },
     barContainer: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent:'center',
         height: 100,
@@ -36,11 +36,39 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: "white",
+    },
+    balanceContainer: {
+        flexDirection: 'row',
+        justifyContent:'center',
+        alignItems: 'center',
+        marginTop: 30,
+        height: 100,
+        width: 200,
+        backgroundColor: "blue",
+    },
+    balance: {
+        flex: 1,
+        height: 100,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    balanceIcon : {
+        flex: 0.2,
+        height: 100,
+        marginRight: 5,
+    },
+    balanceText: {
+        color: "white",
+        fontSize: 20,
+        fontWeight: 'bold',
     }
 });
 
 const MIN_FLEX = 0.25;
 const MAX_FLEX = 1 - MIN_FLEX;
+const POSITIVE_BALANCE_ICON = 'plus-circle';
+const NEGATIVE_BALANCE_ICON = 'minus-circle';
 
 export default class BalanceScreen extends React.Component {
 
@@ -61,6 +89,8 @@ export default class BalanceScreen extends React.Component {
         this.state = {
             totalIncomes: 0,
             totalExpenditures: 0,
+            balance: 0,
+            balanceIcon: POSITIVE_BALANCE_ICON,
             flexIncomeBar: 0.5,
             flexExpenditureBar: 0.5,
         };
@@ -91,6 +121,9 @@ export default class BalanceScreen extends React.Component {
     getBalance = async () => {
         await this.getIncomes();
         await this.getExpenditures();
+        const balance = this.state.totalIncomes - this.state.totalExpenditures;
+        const balanceIcon = (balance >= 0) ? POSITIVE_BALANCE_ICON : NEGATIVE_BALANCE_ICON;
+        this.setState({balance, balanceIcon});
 
         const total = this.state.totalIncomes + this.state.totalExpenditures;
         if (total === 0){
@@ -120,11 +153,6 @@ export default class BalanceScreen extends React.Component {
 
         return (
             <View style={styles.mainView}>
-                <Text> Esta es la pantalla de balanza </Text>
-
-                <Text>Total Incomes: {this.state.totalIncomes}</Text>
-                <Text>Total Expenditures: {this.state.totalExpenditures}</Text>
-
                 <View style={styles.barContainer}>
                     <View style={{
                         ...styles.incomeBar,
@@ -141,6 +169,12 @@ export default class BalanceScreen extends React.Component {
                         <Text style={styles.barLabel}>
                             ${this.state.totalExpenditures}
                         </Text>
+                    </View>
+                </View>
+                <View style={styles.balanceContainer}>
+                    <View style={styles.balance}>
+                        <Icon name={this.state.balanceIcon} type='font-awesome' color="white" containerStyle={styles.balanceIcon}/>
+                        <Text style={styles.balanceText}>$ {Math.abs(this.state.balance)}</Text>
                     </View>
                 </View>
 
