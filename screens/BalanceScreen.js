@@ -1,8 +1,6 @@
 import React from 'react';
-import {Button, Text, View, StyleSheet} from 'react-native';
-import {NavigationActions, StackActions} from "react-navigation";
+import {Text, View, StyleSheet} from 'react-native';
 import {StorageService} from "../StorageService";
-import cloneDeep from "lodash/cloneDeep";
 
 const styles = StyleSheet.create({
     mainView: {
@@ -12,7 +10,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     barContainer: {
-        flex: 0.8,
+        flex: 1,
         flexDirection: 'row',
         justifyContent:'center',
         height: 100,
@@ -21,26 +19,28 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     incomeBar: {
+        flex: 1,
         height: 100,
         backgroundColor: '#a4c639',
         justifyContent: 'center',
         alignItems: 'center'
     },
     expenditureBar: {
+        flex: 1,
         height: 100,
         backgroundColor: '#cc0000',
         justifyContent: 'center',
         alignItems: 'center'
     },
     barLabel: {
-        flex: 1,
         fontSize: 20,
         fontWeight: 'bold',
         color: "white",
-        justifyContent:'center',
-        alignItems: 'center',
     }
 });
+
+const MIN_FLEX = 0.25;
+const MAX_FLEX = 1 - MIN_FLEX;
 
 export default class BalanceScreen extends React.Component {
 
@@ -64,32 +64,6 @@ export default class BalanceScreen extends React.Component {
             flexIncomeBar: 0.5,
             flexExpenditureBar: 0.5,
         };
-
-        // this.styles = StyleSheet.create({
-        //     mainView: {
-        //         flex: 1,
-        //         flexDirection: 'column',
-        //         backgroundColor:"yellow",
-        //         alignItems: 'center',
-        //     },
-        //     barContainer: {
-        //         flex: 0.8,
-        //         flexDirection: 'row',
-        //         justifyContent:'center',
-        //         height: 100,
-        //         backgroundColor:"powderblue",
-        //         marginLeft: 10,
-        //         marginRight: 10,
-        //     },
-        //     incomeBar: {
-        //         height: 100,
-        //         backgroundColor: '#a4c639'
-        //     },
-        //     expenditureBar: {
-        //         height: 100,
-        //         backgroundColor: '#cc0000'
-        //     },
-        // });
 
         this._isMounted = false;
     }
@@ -117,15 +91,29 @@ export default class BalanceScreen extends React.Component {
     getBalance = async () => {
         await this.getIncomes();
         await this.getExpenditures();
+
+        const total = this.state.totalIncomes + this.state.totalExpenditures;
+        if (total === 0){
+            this.setState({
+                flexIncomeBar: 0.5,
+                flexExpenditureBar: 0.5,
+            });
+            return;
+        }
+
+        let flexIncome = this.state.totalIncomes/total;
+        flexIncome = Math.max(flexIncome, MIN_FLEX);
+        flexIncome = Math.min(flexIncome, MAX_FLEX);
+
+        let flexExpenditure = this.state.totalExpenditures/total;
+        flexExpenditure = Math.max(flexExpenditure, MIN_FLEX);
+        flexExpenditure = Math.min(flexExpenditure, MAX_FLEX);
+
         this.setState({
-            flexIncomeBar: 0.35,
-            flexExpenditureBar: 0.65,
+            flexIncomeBar: flexIncome,
+            flexExpenditureBar: flexExpenditure,
         });
     };
-
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return true;
-    // }
 
     render() {
         this.getBalance();
