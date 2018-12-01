@@ -123,29 +123,31 @@ export default class BalanceScreen extends React.Component {
         await this.getExpenditures();
         const balance = this.state.totalIncomes - this.state.totalExpenditures;
         const balanceIcon = (balance >= 0) ? POSITIVE_BALANCE_ICON : NEGATIVE_BALANCE_ICON;
-        this.setState({balance, balanceIcon});
+        if (this._isMounted) {
+          this.setState({balance, balanceIcon});
 
-        const total = this.state.totalIncomes + this.state.totalExpenditures;
-        if (total === 0){
+          const total = this.state.totalIncomes + this.state.totalExpenditures;
+          if (total === 0) {
             this.setState({
-                flexIncomeBar: 0.5,
-                flexExpenditureBar: 0.5,
+              flexIncomeBar: 0.5,
+              flexExpenditureBar: 0.5,
             });
             return;
-        }
+          }
 
-        let flexIncome = this.state.totalIncomes/total;
-        flexIncome = Math.max(flexIncome, MIN_FLEX);
-        flexIncome = Math.min(flexIncome, MAX_FLEX);
+          let flexIncome = this.state.totalIncomes / total;
+          flexIncome = Math.max(flexIncome, MIN_FLEX);
+          flexIncome = Math.min(flexIncome, MAX_FLEX);
 
-        let flexExpenditure = this.state.totalExpenditures/total;
-        flexExpenditure = Math.max(flexExpenditure, MIN_FLEX);
-        flexExpenditure = Math.min(flexExpenditure, MAX_FLEX);
+          let flexExpenditure = this.state.totalExpenditures / total;
+          flexExpenditure = Math.max(flexExpenditure, MIN_FLEX);
+          flexExpenditure = Math.min(flexExpenditure, MAX_FLEX);
 
-        this.setState({
+          this.setState({
             flexIncomeBar: flexIncome,
             flexExpenditureBar: flexExpenditure,
-        });
+          });
+        }
     };
 
     render() {
