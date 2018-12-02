@@ -8,9 +8,9 @@ module.exports = {
   },
 };
 
-module.exports.getData = () => {
-  //const incomes = await StorageService.getIncomesAsVariable();
-  //const expenditures = await StorageService.getExpendituresAsVariable();
+module.exports.getData = async () => {
+  const incomes = await StorageService.getIncomesAsVariable();
+  const expenditures = await StorageService.getExpendituresAsVariable();
   return [].concat(advBalance(),advWarning(),fillerWarning());
 };
 

@@ -9,13 +9,30 @@ export default class AdvicesScreen extends React.Component {
         title: 'Consejos',
     };
 
-    render() {
+    constructor(props){
+      super(props);
+      this.state ={
+        data: []
+      }
+    }
+
+
+    async componentDidMount() {
+      return getData().then(
+          (data) => {
+            this.setState({ //recordar que re-renderea cada vez que se llama a setState
+              data:  data});
+          })
+    }
+
+
+  render() {
         return (
             <View style={styles.container}>
                 <Text> Esta es la pantalla de consejos </Text>
 
                 <FlatList
-                  data={getData()}
+                  data={this.state.data}
                   renderItem = {
                     ({item}) =>
                         <Text style={styles.item}>
