@@ -52,11 +52,17 @@ export class StorageService {
 
     static getIncomesAsVariable = async () => {
       var variableIncomes= await StorageService.getMovemements('variable_income');
+      variableIncomes = variableIncomes.map(
+          function (income) {
+            return {money: income.money, date: new Date(income.date), category: income.category}
+          }
+      );
       const fixedIncomes = await StorageService.getMovemements('fixed_income');
       fixedIncomes.forEach(function (income) {
         let act_date = new Date(income.since);   //esta mierda de adentro es string! ej.: "2018-11-27T03:00:00.000Z"
-        while (act_date <= income.until) {
-          variableIncomes.push({money: income.money, date: act_date, category: income.category});
+        const threshold = new Date(income.until)
+        while (act_date <= threshold) {
+          variableIncomes.push({money: income.money, date: new Date(act_date.getTime()), category: income.category});
           act_date.setMonth(1 + act_date.getMonth()); //possibly buggy: see https://stackoverflow.com/questions/12793045/adding-months-to-a-date-in-javascript
         }
       });
@@ -65,11 +71,17 @@ export class StorageService {
 
     static getExpendituresAsVariable = async () => {
       var variableExp= await StorageService.getMovemements('variable_expenditure');
+      variableExp = variableExp.map(
+          function (exp) {
+            return {money: exp.money, date: new Date(exp.date), category: exp.category}
+          }
+      );
       const fixedExp = await StorageService.getMovemements('fixed_expenditure');
       fixedExp.forEach(function (exp) {
         let act_date = new Date(exp.since);   //esta mierda de adentro es string! ej.: "2018-11-27T03:00:00.000Z"
-        while (act_date <= exp.until) {
-          variableExp.push({money: exp.money, date: act_date, category: exp.category});
+        const threshold = new Date(exp.until)
+        while (act_date <= threshold) {
+          variableExp.push({money: exp.money, date: new Date(act_date.getTime()), category: exp.category});
           act_date.setMonth(1 + act_date.getMonth()); //possibly buggy: see above
         }
       });

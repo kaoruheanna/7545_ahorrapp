@@ -9,17 +9,27 @@ module.exports = {
 };
 
 module.exports.getData = async () => {
-  const incomes = await StorageService.getIncomesAsVariable();
-  const expenditures = await StorageService.getExpendituresAsVariable();
-  return [].concat(advBalance(),advWarning(),fillerWarning());
+  const incas = await StorageService.getIncomesAsVariable();
+  const exps = await StorageService.getExpendituresAsVariable();
+  return [].concat(advBalance(),advWarning(exps),fillerWarning());
 };
 
 function advBalance() {
   return [{cat: 'balance', msg: 'estas gastando mucho'}];
 }
 
-function advWarning() {
-  return [{cat: 'warning', msg: 'del 7-11 al 10-12 tenes un gasto de $1200'}];
+function advWarning(exps) {
+  let advs = [{cat: 'warning', msg: 'del 7-11 al 10-12 tenes un gasto de $1200'}];
+  if (exps.length) {
+    const max_exp = exps.reduce(
+        (carry, exp) => {
+          return (carry.money > exp.money) ? carry : exp;
+        }
+    );
+    advs.push({cat: 'warning',
+               msg: 'tu máximo gasto es de $'+max_exp.money + ' el '+max_exp.date.toLocaleDateString('es-AR')});
+  }
+  return advs;
 }
 
 function fillerWarning() {
