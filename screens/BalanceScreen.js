@@ -2,7 +2,8 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {StorageService} from "../StorageService";
 import { Icon } from 'react-native-elements'
-
+import t from "tcomb-form-native";
+import moment from "moment";
 
 const styles = StyleSheet.create({
     mainView: {
@@ -70,6 +71,39 @@ const MAX_FLEX = 1 - MIN_FLEX;
 const POSITIVE_BALANCE_ICON = 'plus-circle';
 const NEGATIVE_BALANCE_ICON = 'minus-circle';
 
+const Form = t.form.Form;
+Form.stylesheet.dateValue.normal.borderColor = '#d0d2d3';
+Form.stylesheet.dateValue.normal.borderRadius = 4;
+Form.stylesheet.dateValue.normal.borderWidth = 1;
+
+const formOptions = {
+    fields: {
+        since: {
+            label: 'Desde',
+            mode: 'date',
+            config: {
+                format: (date) => moment(date).format('DD-MM-YY'),
+                defaultValueText: " ",
+                dialogMode: "spinner",
+            },
+        },
+        until: {
+            label: 'Hasta',
+            mode: 'date',
+            config: {
+                format: (date) => moment(date).format('DD-MM-YY'),
+                defaultValueText: " ",
+                dialogMode: "spinner",
+            },
+        }
+    }
+};
+
+const BalanceFilters = t.struct({
+    since: t.maybe(t.Date),
+    until: t.maybe(t.Date),
+});
+
 export default class BalanceScreen extends React.Component {
 
     componentDidMount() {
@@ -93,6 +127,10 @@ export default class BalanceScreen extends React.Component {
             balanceIcon: POSITIVE_BALANCE_ICON,
             flexIncomeBar: 0.5,
             flexExpenditureBar: 0.5,
+            filters: {
+                since: null,
+                until: null,
+            }
         };
 
         this._isMounted = false;
@@ -100,54 +138,56 @@ export default class BalanceScreen extends React.Component {
 
     getIncomes = async () => {
         const incomes = await StorageService.getIncomes();
-        if (this._isMounted) {
-            const totalIncomes = incomes.reduce((carry, income) => {
-                return carry + income.money;
-            }, 0);
-            this.setState({totalIncomes});
-        }
+        return incomes.reduce((carry, income) => {
+            return carry + income.money;
+        }, 0);
     };
 
     getExpenditures = async () => {
         const expenditures = await StorageService.getExpenditures();
-        if (this._isMounted) {
-            const totalExpenditures = expenditures.reduce((carry, income) => {
-                return carry + income.money;
-            }, 0);
-            this.setState({totalExpenditures});
-        }
+        return expenditures.reduce((carry, income) => {
+            return carry + income.money;
+        }, 0);
     };
 
     getBalance = async () => {
-        await this.getIncomes();
-        await this.getExpenditures();
-        const balance = this.state.totalIncomes - this.state.totalExpenditures;
+        const totalIncomes = await this.getIncomes();
+        const totalExpenditures = await this.getExpenditures();
+
+        const balance = totalIncomes - totalExpenditures;
         const balanceIcon = (balance >= 0) ? POSITIVE_BALANCE_ICON : NEGATIVE_BALANCE_ICON;
-        if (this._isMounted) {
-          this.setState({balance, balanceIcon});
 
-          const total = this.state.totalIncomes + this.state.totalExpenditures;
-          if (total === 0) {
-            this.setState({
-              flexIncomeBar: 0.5,
-              flexExpenditureBar: 0.5,
-            });
+        if (!this._isMounted) {
             return;
-          }
-
-          let flexIncome = this.state.totalIncomes / total;
-          flexIncome = Math.max(flexIncome, MIN_FLEX);
-          flexIncome = Math.min(flexIncome, MAX_FLEX);
-
-          let flexExpenditure = this.state.totalExpenditures / total;
-          flexExpenditure = Math.max(flexExpenditure, MIN_FLEX);
-          flexExpenditure = Math.min(flexExpenditure, MAX_FLEX);
-
-          this.setState({
-            flexIncomeBar: flexIncome,
-            flexExpenditureBar: flexExpenditure,
-          });
         }
+
+        let flexIncomeBar = 0.5;
+        let flexExpenditureBar = 0.5;
+
+        const total = totalIncomes + totalExpenditures;
+        if (total > 0) {
+            flexIncomeBar = this.state.totalIncomes / total;
+            flexIncomeBar = Math.max(flexIncomeBar, MIN_FLEX);
+            flexIncomeBar = Math.min(flexIncomeBar, MAX_FLEX);
+
+            flexExpenditureBar = this.state.totalExpenditures / total;
+            flexExpenditureBar = Math.max(flexExpenditureBar, MIN_FLEX);
+            flexExpenditureBar = Math.min(flexExpenditureBar, MAX_FLEX);
+        }
+
+        this.setState({
+            totalIncomes: totalIncomes,
+            totalExpenditures: totalExpenditures,
+            balance: balance,
+            balanceIcon: balanceIcon,
+            flexIncomeBar: flexIncomeBar,
+            flexExpenditureBar: flexExpenditureBar,
+        });
+    };
+
+    onChange = (value) => {
+        console.log("filters:", value);
+        this.setState({ filters: value });
     };
 
     render() {
@@ -155,6 +195,16 @@ export default class BalanceScreen extends React.Component {
 
         return (
             <View style={styles.mainView}>
+                <View>
+                    <Form
+                        ref="form"
+                        type={BalanceFilters}
+                        value={this.state.filters}
+                        onChange={this.onChange.bind(this)}
+                        options={formOptions}
+                    />
+                </View>
+
                 <View style={styles.barContainer}>
                     <View style={{
                         ...styles.incomeBar,
