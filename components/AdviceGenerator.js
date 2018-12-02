@@ -9,7 +9,7 @@ module.exports = {
 };
 
 module.exports.getData = async () => {
-  const incas = await StorageService.getIncomesAsVariable();
+  const incs = await StorageService.getIncomesAsVariable();
   const exps = await StorageService.getExpendituresAsVariable();
   return [].concat(advBalance(),advWarning(exps),fillerWarning());
 };
