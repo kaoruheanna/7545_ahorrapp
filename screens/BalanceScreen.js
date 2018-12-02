@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet, Button} from 'react-native';
 import {StorageService} from "../StorageService";
 import { Icon } from 'react-native-elements'
 import t from "tcomb-form-native";
@@ -10,6 +10,13 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor:"yellow",
         alignItems: 'center',
+    },
+    filterContainer: {
+        width: 200,
+        backgroundColor:"white",
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 20,
     },
     barContainer: {
         flexDirection: 'row',
@@ -76,23 +83,26 @@ Form.stylesheet.dateValue.normal.borderColor = '#d0d2d3';
 Form.stylesheet.dateValue.normal.borderRadius = 4;
 Form.stylesheet.dateValue.normal.borderWidth = 1;
 
+
 const formOptions = {
+    // stylesheet: stylesheet,
+    auto: 'none',
     fields: {
         since: {
-            label: 'Desde',
+            placeholder: 'Desde',
             mode: 'date',
             config: {
                 format: (date) => moment(date).format('DD-MM-YY'),
-                defaultValueText: " ",
+                defaultValueText: "Desde",
                 dialogMode: "spinner",
             },
         },
         until: {
-            label: 'Hasta',
+            placeholder: 'Hasta',
             mode: 'date',
             config: {
                 format: (date) => moment(date).format('DD-MM-YY'),
-                defaultValueText: " ",
+                defaultValueText: "Hasta",
                 dialogMode: "spinner",
             },
         }
@@ -190,12 +200,19 @@ export default class BalanceScreen extends React.Component {
         this.setState({ filters: value });
     };
 
+    onPress = () => {
+        var value = this.refs.form.getValue();
+        if (value) {
+            console.log("value:",value);
+        }
+    };
+
     render() {
         this.getBalance();
 
         return (
             <View style={styles.mainView}>
-                <View>
+                <View style={styles.filterContainer}>
                     <Form
                         ref="form"
                         type={BalanceFilters}
@@ -203,6 +220,7 @@ export default class BalanceScreen extends React.Component {
                         onChange={this.onChange.bind(this)}
                         options={formOptions}
                     />
+                    <Button title="Filtrar" onPress={this.onPress} styles={styles.container}/>
                 </View>
 
                 <View style={styles.barContainer}>
