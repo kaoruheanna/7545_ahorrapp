@@ -8,21 +8,19 @@ import moment from "moment";
 const styles = StyleSheet.create({
     mainView: {
         flexDirection: 'column',
-        backgroundColor:"yellow",
         alignItems: 'center',
     },
     filterContainer: {
         width: 200,
-        backgroundColor:"white",
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 20,
+        marginTop: 10,
     },
     barContainer: {
         flexDirection: 'row',
         justifyContent:'center',
         height: 100,
-        backgroundColor:"powderblue",
         marginLeft: 10,
         marginRight: 10,
     },
@@ -85,7 +83,6 @@ Form.stylesheet.dateValue.normal.borderWidth = 1;
 
 
 const formOptions = {
-    // stylesheet: stylesheet,
     auto: 'none',
     fields: {
         since: {
