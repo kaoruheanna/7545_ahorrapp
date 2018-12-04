@@ -7,6 +7,7 @@ import FixedExpenditureScreen from "./screens/FixedExpenditureScreen";
 import VariableExpenditureScreen from "./screens/VariableExpenditureScreen";
 import VariableIncomeScreen from "./screens/VariableIncomeScreen";
 import BalanceScreen from "./screens/BalanceScreen";
+import HistoryScreen from "./screens/HistoryScreen";
 
 const AppNavigator = createStackNavigator({
     Home: { screen: HomeScreen },
@@ -16,6 +17,8 @@ const AppNavigator = createStackNavigator({
     FixedIncome: { screen: FixedIncomeScreen },
     VariableExpenditure: { screen: VariableExpenditureScreen },
     VariableIncome: { screen: VariableIncomeScreen },
+    History: { screen: HistoryScreen },
+
 }, {
     initialRouteName: 'Home',
     defaultNavigationOptions: {

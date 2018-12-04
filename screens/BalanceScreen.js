@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
+import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import {StorageService} from "../StorageService";
 import { Icon } from 'react-native-elements'
 import t from "tcomb-form-native";
@@ -238,13 +238,14 @@ export default class BalanceScreen extends React.Component {
                         </Text>
                     </View>
                 </View>
-                <View style={styles.balanceContainer}>
-                    <View style={styles.balance}>
-                        <Icon name={this.state.balanceIcon} type='font-awesome' color="white" containerStyle={styles.balanceIcon}/>
-                        <Text style={styles.balanceText}>$ {Math.abs(this.state.balance)}</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('History')}>
+                    <View style={styles.balanceContainer}>
+                        <View style={styles.balance}>
+                            <Icon name={this.state.balanceIcon} type='font-awesome' color="white" containerStyle={styles.balanceIcon}/>
+                            <Text style={styles.balanceText}>$ {Math.abs(this.state.balance)}</Text>
+                        </View>
                     </View>
-                </View>
-
+                </TouchableOpacity>
             </View>
         );
     }
