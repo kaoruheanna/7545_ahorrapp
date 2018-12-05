@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, ScrollView, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import { Icon } from 'react-native-elements'
 import {NavigationActions, StackActions} from "react-navigation";
 import { Table, Row } from 'react-native-table-component';
@@ -12,6 +12,7 @@ import Button from 'react-native-really-awesome-button/src/themes/rick';
 
 const MIN_FLEX = 0.25;
 const MAX_FLEX = 1 - MIN_FLEX;
+const LOADING_TIME = 1000;
 
 const Form = t.form.Form;
 Form.stylesheet.dateValue.normal.borderColor = '#d0d2d3';
@@ -65,7 +66,17 @@ export default class HistoryScreen extends React.Component {
     constructor(props){
         super(props);
         const tableHeader = (displayTitle, fieldName) => (
-            <TouchableOpacity onPress={() => this.sortHistory(fieldName)}>
+            <TouchableOpacity onPress={() => {
+                this.setState({isLoading: true});
+                this.sortHistory(fieldName);
+                const displayData = this.displayFormatHistory();
+                setTimeout(() => {
+                    this.setState({ 
+                        tableData: displayData, 
+                        isLoading: false
+                    })
+                }, LOADING_TIME);
+            }}>
                 <View>
                     <Text>{displayTitle}</Text>
                 </View>
@@ -83,7 +94,8 @@ export default class HistoryScreen extends React.Component {
             incomePercentage: 0.5,
             totalIncomes: 0,
             totalExpenditures: 0,
-            periodBalance: 0
+            periodBalance: 0,
+            isLoading: true,
         }
         this.reverse = false;
         this.currentSort = 'none';
@@ -174,9 +186,8 @@ export default class HistoryScreen extends React.Component {
 
         this.filterHistory();
         this.sortHistory('date');
-        this.setState({
-            tableData: this.displayFormatHistory()
-        });
+        const displayData = this.displayFormatHistory();
+        setTimeout(() => {this.setState({ tableData: displayData, isLoading: false})}, LOADING_TIME);
     };
 
     getSort(key) {
@@ -218,21 +229,27 @@ export default class HistoryScreen extends React.Component {
     }
 
     onFilterPress = () => {
+        this.setState({ isLoading: true, filtersVisible: false });        
         var value = this.refs.form.getValue();
+
         if (value) {
-            console.log("value:",value);
             this.filter = value;
             this.filterHistory();
-            this.setState({
-                tableData: this.displayFormatHistory()
-            });            
+            const displayData = this.displayFormatHistory();
+            setTimeout(() => {this.setState({ tableData: displayData, isLoading: false})}, LOADING_TIME);
         }
     };
 
     render() {
         var state = this.state;
+
         return (
             <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <Modal isVisible={state.isLoading}>
+                    <ActivityIndicator animating={true} size="large" style={{ flex: 1, 
+                    alignItems: 'center', justifyContent: 'center', height: 80 }}/>
+                </Modal>
+
                 <Modal isVisible={state.filtersVisible} onBackdropPress={() => this.hideFilters()}>
                     <View style={{ flex: 0.5, flexDirection: 'column', alignItems: 'center', padding: 32, paddingTop: 30, backgroundColor: '#fff' }}>
                         <View style={{flexDirection:'row'}}>

@@ -1,5 +1,7 @@
 import React from "react";
-import {Button} from "react-native-elements";
+import {View, Text} from 'react-native';
+import { Icon } from 'react-native-elements'
+import Button from 'react-native-really-awesome-button/src/themes/rick';
 
 export default class HomeButton extends React.Component {
     render() {
@@ -21,21 +23,18 @@ export default class HomeButton extends React.Component {
 
         return (
             <Button
-                icon={{name: icon, type: 'font-awesome'}}
-                buttonStyle={{
-                    backgroundColor: backgroundColor,
-                    width: 130,
-                    height: 70,
-                    borderColor: "transparent",
-                    borderWidth: 0,
-                    borderRadius: 5
-                }}
-                containerStyle={{ marginTop: 20 }}
-                title={this.props.title}
+                width={130}
+                height={70}
+                backgroundColor={backgroundColor}
                 onPress={() => {
                     this.props.onPress(this.props.screen);
                 }}
-            />
+            >
+                <View style={{flexDirection:'row', justifyContent:'space-evenly', alignItems:'center'}}>
+                    <Icon name={icon} type='font-awesome' color='white'/>
+                    <Text style={{color:'white', marginLeft: 10}}>{this.props.title}</Text>
+                </View>
+            </Button>
         )
     };
 }

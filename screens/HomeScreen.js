@@ -1,8 +1,7 @@
 import React from 'react';
-import {StyleSheet, Button, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import HomeButton from '../components/HomeButton.js';
 import { StackActions, NavigationActions } from 'react-navigation';
-
 
 export default class HomeScreen extends React.Component {
 
@@ -52,5 +51,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'space-evenly',
+        alignItems: 'center'
     },
 });
