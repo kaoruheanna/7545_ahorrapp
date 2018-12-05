@@ -16,6 +16,9 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-dropdownalert": "^3.7.1",
     "react-native-elements": "^0.19.1",
+    "react-native-modal": "^7.0.1",
+    "react-native-progress": "^3.5.0",
+    "react-native-really-awesome-button": "^0.8.3",
     "react-native-table-component": "^1.1.8",
     "react-navigation": "^3.0.0",
     "tcomb-form-native": "^0.6.20"
