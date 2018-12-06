@@ -124,7 +124,7 @@ export default class HistoryScreen extends React.Component {
         this.currentSort = 'none';
         this.filter = {
             from: moment().startOf('month').toDate(),
-            to: moment().toDate(),
+            to: moment().endOf('month').toDate(),
             category: null
         }
     }
@@ -404,7 +404,7 @@ export default class HistoryScreen extends React.Component {
                             {
                                 state.tableData.map((rowData, index) => (
                                     <TouchableOpacity key={index} onPress={() => this.showModal(index)}>
-                                        <TableWrapper key={index} style={{flexDirection: 'row'}}>
+                                        <TableWrapper key={index} style={[rowData[2] > 0 ? {flexDirection: 'row', backgroundColor: '#C5DD99'} : {flexDirection: 'row', backgroundColor: '#E59092'}]}>
                                             <Cell key={0} data={rowData[0]} textStyle={styles.text}/>
                                             <Cell key={1} data={rowData[1]} textStyle={styles.text}/>
                                             <Cell key={2} data={this.formatCurrency(rowData[2])} 
