@@ -8,12 +8,12 @@ export default class HomeButton extends React.Component {
 
         let icon = '';
 
-        let backgroundColor = "#0000FF";
+        let backgroundColor = "#B7ABA5";
         if (this.props.type === 'income'){
-            backgroundColor = "#a4c639";
+            backgroundColor = "#BCDD7E";
             icon = 'plus-circle';
         } else if (this.props.type === 'expenditure') {
-            backgroundColor = "#cc0000";
+            backgroundColor = "#E57B7D";
             icon = 'minus-circle';
         } else if (this.props.type === 'balance') {
             icon = 'balance-scale';
@@ -26,13 +26,14 @@ export default class HomeButton extends React.Component {
                 width={130}
                 height={70}
                 backgroundColor={backgroundColor}
+                backgroundDarker="#E5DED3"
                 onPress={() => {
                     this.props.onPress(this.props.screen);
                 }}
             >
                 <View style={{flexDirection:'row', justifyContent:'space-evenly', alignItems:'center'}}>
-                    <Icon name={icon} type='font-awesome' color='white'/>
-                    <Text style={{color:'white', marginLeft: 10}}>{this.props.title}</Text>
+                    <Icon name={icon} type='font-awesome' color='black'/>
+                    <Text style={{color:'black', fontWeight:'bold', marginLeft: 10}}>{this.props.title}</Text>
                 </View>
             </Button>
         )

@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import { Icon } from 'react-native-elements'
 import {NavigationActions, StackActions} from "react-navigation";
-import { Table, Row } from 'react-native-table-component';
+import { Table, Row, Cell } from 'react-native-table-component';
 import Modal from "react-native-modal";
 import {StorageService} from "../StorageService";
 import moment from "moment";
@@ -21,9 +21,16 @@ Form.stylesheet.dateValue.normal.borderWidth = 1;
 
 const formOptions = {
     auto: 'none',
+    i18n: {
+        optional: '',
+    },
     fields: {
+        category: {
+            label: 'Categoría',
+        },        
         from: {
-            placeholder: 'Desde',
+            label: 'Desde',
+            placeholder: moment().startOf('month').format('DD-MM-YY'),
             mode: 'date',
             config: {
                 format: (date) => moment(date).format('DD-MM-YY'),
@@ -32,7 +39,8 @@ const formOptions = {
             },
         },
         to: {
-            placeholder: 'Hasta',
+            label: 'Hasta',
+            placeholder: moment().format('DD-MM-YY'),
             mode: 'date',
             config: {
                 format: (date) => moment(date).format('DD-MM-YY'),
@@ -46,6 +54,17 @@ const formOptions = {
 const BalanceFilters = t.struct({
     from: t.maybe(t.Date),
     to: t.maybe(t.Date),
+    category: t.maybe(t.enums({
+        'Supermercado': 'Supermercado',
+        'Alquiler': 'Alquiler',
+        'Servicios': 'Servicios',
+        'Transporte': 'Transporte',
+        'Colegio': 'Colegio',
+        'Auto': 'Auto',
+        'Sueldo': 'Sueldo',
+        'Honorarios': 'Honorarios',        
+        'Otros': 'Otros',
+    }, 'Category'))
 });
 
 export default class HistoryScreen extends React.Component {
@@ -55,7 +74,7 @@ export default class HistoryScreen extends React.Component {
             title: 'Balanza',
             headerRight: (
                 <TouchableOpacity onPress={navigation.getParam('showFilters')}>
-                    <View style={{...styles.container, ...{backgroundColor: "#f1f8ff", flex: 1, alignItems: "center", justifyContent: "center"}}}>
+                    <View style={{...styles.container, ...{backgroundColor: "#E5DED3", flex: 1, alignItems: "center", justifyContent: "center"}}}>
                         <Icon name='filter' type='font-awesome' color="black" />
                     </View>
                 </TouchableOpacity>
@@ -78,7 +97,7 @@ export default class HistoryScreen extends React.Component {
                 }, LOADING_TIME);
             }}>
                 <View>
-                    <Text>{displayTitle}</Text>
+                    <Text style={{alignSelf: 'center', fontWeight: 'bold'}}>{displayTitle}</Text>
                 </View>
             </TouchableOpacity>
         );
@@ -125,22 +144,26 @@ export default class HistoryScreen extends React.Component {
     };
 
     calculateBalance() {
-        const totalIncomes = this.shownHistory.reduce((acum, movement) => {
+        const currentPeriod = this.history.filter((movement) => {
+            return movement.date >= this.filter.from && movement.date <= this.filter.to;
+        });
+
+        const totalIncomes = currentPeriod.reduce((acum, movement) => {
             return acum + ( movement.money > 0 ? movement.money : 0 );
         }, 0);
 
-        const totalExpenditures = this.shownHistory.reduce((acum, movement) => {
+        const totalExpenditures = currentPeriod.reduce((acum, movement) => {
             return acum - ( movement.money < 0 ? movement.money : 0 );
         }, 0);
 
-        const beforeShownHistory = this.history.filter((movement) => {
+        const beforeCurrentPeriod = this.history.filter((movement) => {
             return movement.date < this.filter.from;
         });
 
         let initialBalance = 0;
 
-        if (beforeShownHistory.length > 0) {
-            initialBalance = beforeShownHistory.reduce((acum, movement) => {
+        if (beforeCurrentPeriod.length > 0) {
+            initialBalance = beforeCurrentPeriod.reduce((acum, movement) => {
                 return acum + movement.money;
             }, 0);
         }
@@ -251,19 +274,21 @@ export default class HistoryScreen extends React.Component {
                 </Modal>
 
                 <Modal isVisible={state.filtersVisible} onBackdropPress={() => this.hideFilters()}>
-                    <View style={{ flex: 0.5, flexDirection: 'column', alignItems: 'center', padding: 32, paddingTop: 30, backgroundColor: '#fff' }}>
+                    <View style={{ flex: 0.7, borderRadius: 10, flexDirection: 'column', alignItems: 'center', padding: 32, backgroundColor: '#fff' }}>
                         <View style={{flexDirection:'row'}}>
                             <View style={{flex:0.8}}>
                                 <Form
                                     ref="form"
                                     type={BalanceFilters}
-                                    value={this.state.filters}
+                                    value={this.filter}
                                     options={formOptions}
                                 />                            
                             </View>
                         </View>
-                        <Button type="primary" onPress={this.onFilterPress}>
-                            <Text>Filtrar</Text>
+                        <Button onPress={this.onFilterPress} backgroundColor="#B7ABA5" backgroundDarker="#E5DED3">
+                            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                                Filtrar
+                            </Text>
                         </Button>
                     </View>
                 </Modal>
@@ -274,41 +299,40 @@ export default class HistoryScreen extends React.Component {
                     </View>
                 </Modal>
 
-                <View style={{flex: 0.1, flexDirection:'column', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ flex: 0.4, flexDirection:'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{flexDirection:'row'}}>
-                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'flex-start'}}>
-                            <Text>Periodo {moment(this.filter.from).format('DD/MM/YY')} - {moment(this.filter.to).format('DD/MM/YY')}</Text>
+                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'center', padding: 20}}>
+                            <Text style={{fontWeight:'bold', fontSize:20}}>
+                                Periodo {moment(this.filter.from).format('DD/MM/YY')} - {moment(this.filter.to).format('DD/MM/YY')}
+                            </Text>
                         </View>
-                    </View>                                
-                </View>
-                <View style={{ flex: 0.3, flexDirection:'column', justifyContent: 'center', alignItems: 'center' }}>
+                    </View>                
                     <View style={{flexDirection:'row'}}>
-                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
                             <Text>Balance Inicial</Text>
-                            <Text>${this.state.initialBalance}</Text>
+                            <Text style="fontWeight:'bold">${this.state.initialBalance}</Text>
                         </View>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
                             <Text>Balance Final</Text>
-                            <Text>${this.state.finalBalance}</Text>
+                            <Text style="fontWeight:'bold">${this.state.finalBalance}</Text>
                         </View>                        
                     </View>
                     <View style={{flexDirection:'row', paddingTop:16}}>
-                        <Progress.Bar style={{flex:0.9}} progress={this.state.incomePercentage} color='#a4c639' unfilledColor = '#cc0000' width={null} height={30} borderRadius={10}/>
+                        <Progress.Bar style={{flex:0.9}} progress={this.state.incomePercentage} color='#C5DD99' unfilledColor = '#E59092' width={null} height={30} borderRadius={10}/>
                     </View>
                     <View style={{flexDirection:'row', paddingBottom:16}}>
-                        <View style={{flex:0.9, flexDirection:'row', justifyContent:"space-between"}}>
+                        <View style={{flex:0.8, flexDirection:'row', justifyContent:"space-between"}}>
                             <Text>${this.state.totalIncomes}</Text>
                             <Text>${this.state.totalExpenditures}</Text>
                         </View>
                     </View>
-                    
                 </View>            
 
-                <View style={{...styles.container, ...{flex: 0.7}}}>
+                <View style={{...styles.container, ...{flex: 0.6}}}>
                     <Table borderStyle={{borderColor: '#C1C0B9'}}>
-                        <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+                        <Row data={state.tableHead} style={styles.head}/>
                         <ScrollView style={styles.dataWrapper}>
                             {
                                 state.tableData.map((rowData, index) => (
@@ -317,6 +341,11 @@ export default class HistoryScreen extends React.Component {
                                     </TouchableOpacity>
                                 ))
                             }
+                            { state.tableData.length == 0 &&
+                                <Cell key={0} data="No hay movimientos para el periodo"
+                                textStyle={{fontWeight:'bold', alignSelf: 'center'}}/>
+                            }
+                            
                         </ScrollView>
                     </Table>
                 </View>
@@ -327,6 +356,6 @@ export default class HistoryScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
+  head: { height: 40, backgroundColor: '#E5DED3'},
   text: { margin: 6 }
 })
