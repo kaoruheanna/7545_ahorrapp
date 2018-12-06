@@ -27,7 +27,7 @@ function in_next_n_month(date,n) {
 
 function advBalance(incs,exps) {
   let advs = [];
-  advs.push({cat: 'balance', msg: 'estas gastando mucho'});
+  //advs.push({cat: 'balance', msg: 'estas gastando mucho'});
   let movs = incs.concat(cloneDeep(exps).map(  (exp) => {
     exp.money = - exp.money;
     return exp;})
@@ -52,32 +52,50 @@ function advBalance(incs,exps) {
     advs.push({cat:'balance', msg: 'si bien este mes está difícil, tranquilo: el mes que viene vas a poder' +
           'cancelar tus deudas y te va a quedar un sobrante de $' + dif});
   }
-  // deficit este mes
+  // deficit este mes y el que viene
+  if (this_month_balance < 0){
+    let max_exp = this_month_movs.reduce( (ant,mov) => {
+      if (mov.money > ant.money){
+        return ant;
+      }
+      return mov;
+    }, {money: 0});
+    if (max_exp.money < 0){
+      let cat = max_exp.category;
+      let money = - max_exp.money;
+      advs.push({cat: 'balance', msg: 'Este mes tenés un gasto de $'+money+" en "+cat+", quizás quieras" +
+            " cancelarlo primero para que no se acumule"})
+    }
+
+  }
   return advs;
 }
 
 function advWarning(exps) {
   let advs = [];
-  advs.push({cat: 'warning', msg: 'del 7-11 al 10-12 tenes un gasto de $1200'});
+  //advs.push({cat: 'warning', msg: 'del 7-11 al 10-12 tenes un gasto de $1200'});
   if (exps.length) {
     const max_exp = exps.reduce(
         (carry, exp) => {
           return (carry.money > exp.money) ? carry : exp;
         }
     );
+    /*
     advs.push({cat: 'warning',
                msg: 'tu máximo gasto es de $'+max_exp.money + ' el '+max_exp.date.toLocaleDateString('es-AR')});
+    */
   }
   return advs;
 }
 
 function fillerWarning() {
   let advs = [];
-  advs.push({
+  /*advs.push({
     cat: "filler", msg: 'texto largo largo largo largo largo largo largo largo largo largo largo largo '+
         'largolargolargo' + 'largolargolargo'+ 'largolargolargo'+'largolargolargo'+'largolargolargo'+
         'largolargolargo'+'largolargolargo'+'largolargolargo'+'largolargolargo'+'largolargolargo'
   });
   advs.push({cat: "filler", msg: 'y ahora uno corto'} );
+  */
   return advs;
 }

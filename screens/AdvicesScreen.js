@@ -29,7 +29,6 @@ export default class AdvicesScreen extends React.Component {
   render() {
         return (
             <View style={styles.container}>
-                <Text> Esta es la pantalla de consejos </Text>
 
                 <FlatList
                   data={this.state.data}
@@ -42,17 +41,6 @@ export default class AdvicesScreen extends React.Component {
                   keyExtractor={(item, index) => index.toString()}
                 />
 
-                <Button
-                    title="Go to Home"
-                    onPress={() => {
-                        this.props.navigation.dispatch(StackActions.reset({
-                            index: 0,
-                            actions: [
-                                NavigationActions.navigate({ routeName: 'Home' })
-                            ],
-                        }))
-                    }}
-                />
             </View>
         );
     }

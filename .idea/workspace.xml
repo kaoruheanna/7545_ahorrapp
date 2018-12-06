@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/components/AdviceGenerator.js" line="82" />
+    <bookmark url="file://$PROJECT_DIR$/components/AdviceGenerator.js" line="100" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05d5d8e6-7346-45cf-a1e5-66b7b369516d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/AdviceGenerator.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/AdviceGenerator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/AdvicesScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AdvicesScreen.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -34,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/components/AdviceGenerator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+            <state relative-caret-position="564">
+              <caret line="85" column="6" selection-start-line="85" selection-start-column="6" selection-end-line="85" selection-end-column="6" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -46,8 +47,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/AdvicesScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="48" column="37" selection-start-line="48" selection-start-column="37" selection-end-line="48" selection-end-column="37" />
+            <state relative-caret-position="465">
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -95,10 +96,10 @@
         <option value="$PROJECT_DIR$/screens/VariableIncomeScreen.js" />
         <option value="$PROJECT_DIR$/screens/VariableExpenditureScreen.js" />
         <option value="$PROJECT_DIR$/App.js" />
-        <option value="$PROJECT_DIR$/screens/AdvicesScreen.js" />
         <option value="$PROJECT_DIR$/StorageService.js" />
         <option value="$PROJECT_DIR$/screens/BalanceScreen.js" />
         <option value="$PROJECT_DIR$/app.json" />
+        <option value="$PROJECT_DIR$/screens/AdvicesScreen.js" />
         <option value="$PROJECT_DIR$/components/AdviceGenerator.js" />
       </list>
     </option>
@@ -189,12 +190,12 @@
       <workItem from="1543784403857" duration="4509000" />
       <workItem from="1543877409799" duration="195000" />
       <workItem from="1544049323383" duration="9660000" />
-      <workItem from="1544116321275" duration="68000" />
+      <workItem from="1544116321275" duration="2249000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74303000" />
+    <option name="totallyTimeSpent" value="76484000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="52" y="-11" width="1229" height="1036" extended-state="6" />
@@ -324,16 +325,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/FixedExpenditureScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-975">
@@ -375,16 +366,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/HistoryScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1950">
-          <caret line="130" lean-forward="true" selection-start-line="130" selection-end-line="130" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/VariableExpenditureScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -402,10 +383,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/screens/HomeScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="475">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/HistoryScreen.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1500">
+          <caret line="130" selection-start-line="130" selection-end-line="130" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/AdvicesScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="48" column="37" selection-start-line="48" selection-start-column="37" selection-end-line="48" selection-end-column="37" />
+        <state relative-caret-position="465">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -414,8 +415,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/components/AdviceGenerator.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="46" column="35" selection-start-line="46" selection-start-column="35" selection-end-line="46" selection-end-column="35" />
+        <state relative-caret-position="564">
+          <caret line="85" column="6" selection-start-line="85" selection-start-column="6" selection-end-line="85" selection-end-column="6" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
