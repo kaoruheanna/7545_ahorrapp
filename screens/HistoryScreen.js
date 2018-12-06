@@ -2,17 +2,21 @@ import React from 'react';
 import {Text, View, ScrollView, TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import { Icon } from 'react-native-elements'
 import {NavigationActions, StackActions} from "react-navigation";
-import { Table, Row, Cell } from 'react-native-table-component';
+import { Table, Row, TableWrapper, Cell } from 'react-native-table-component';
 import Modal from "react-native-modal";
 import {StorageService} from "../StorageService";
 import moment from "moment";
 import * as Progress from 'react-native-progress';
 import t from "tcomb-form-native";
 import Button from 'react-native-really-awesome-button/src/themes/rick';
+import numbro from "numbro";
+import DropdownAlert from 'react-native-dropdownalert';
 
 const MIN_FLEX = 0.25;
 const MAX_FLEX = 1 - MIN_FLEX;
 const LOADING_TIME = 1000;
+
+numbro.setLanguage('es-AR');
 
 const Form = t.form.Form;
 Form.stylesheet.dateValue.normal.borderColor = '#d0d2d3';
@@ -145,7 +149,7 @@ export default class HistoryScreen extends React.Component {
 
     calculateBalance() {
         const currentPeriod = this.history.filter((movement) => {
-            return movement.date >= this.filter.from && movement.date <= this.filter.to;
+            return !movement.deleted && movement.date >= this.filter.from && movement.date <= this.filter.to;
         });
 
         const totalIncomes = currentPeriod.reduce((acum, movement) => {
@@ -157,7 +161,7 @@ export default class HistoryScreen extends React.Component {
         }, 0);
 
         const beforeCurrentPeriod = this.history.filter((movement) => {
-            return movement.date < this.filter.from;
+            return !movement.deleted && movement.date < this.filter.from;
         });
 
         let initialBalance = 0;
@@ -191,7 +195,7 @@ export default class HistoryScreen extends React.Component {
 
     filterHistory() {
         this.shownHistory = this.history.filter((movement) => {
-            let show = true;
+            let show = !movement.deleted;
             if (this.filter.from && movement.date < this.filter.from) show = false;
             if (this.filter.to && movement.date > this.filter.to) show = false;
             if (this.filter.category && movement.category != this.filter.category) show = false;
@@ -263,11 +267,30 @@ export default class HistoryScreen extends React.Component {
         }
     };
 
+    onEliminatePress = () => {
+        this.setState({ isLoading: true, modalVisible: false });
+        this.state.modalData.deleted = true;
+        setTimeout(() => {
+            this.setState({isLoading: false});
+            this.dropdown.alertWithType('success', 'Eliminado!', "");
+        }, LOADING_TIME);
+
+    };
+
+    formatCurrency = (value) => {
+        return numbro(value).formatCurrency({thousandSeparated: true, mantissa: 2});
+        // return value.toLocaleString('es_AR', { 
+        //     style: 'currency', 
+        //     currency: 'ARS'
+        // });
+    };
+
     render() {
         var state = this.state;
 
         return (
             <View style={{ flex: 1, backgroundColor: '#fff' }}>
+                <DropdownAlert successColor='#C5DD99' closeInterval={2000} ref={ref => this.dropdown = ref} />
                 <Modal isVisible={state.isLoading}>
                     <ActivityIndicator animating={true} size="large" style={{ flex: 1, 
                     alignItems: 'center', justifyContent: 'center', height: 80 }}/>
@@ -294,12 +317,52 @@ export default class HistoryScreen extends React.Component {
                 </Modal>
 
                 <Modal isVisible={state.modalVisible} onBackdropPress={() => this.hideModal()}>
-                    <View style={{ flex: 0.7, padding: 32, paddingTop: 30, backgroundColor: '#fff' }}>
-                        <Text> Something should go here</Text>
+                    <View style={{ flex: 0.4, borderRadius: 10, flexDirection: 'column', alignItems: 'center', padding: 32, backgroundColor: '#fff' }}>
+                        { this.state.modalData &&
+                        <View>
+                            <View style={{flexDirection:'row'}}>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
+                                    <Text>Fecha</Text>
+                                    <Text> 
+                                        {moment(this.state.modalData.date).format('DD-MM-YY')}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
+                                    <Text>Categoria</Text>
+                                    <Text> 
+                                        {this.state.modalData.category}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
+                                    <Text>Concepto</Text>
+                                    <Text> 
+                                        {this.state.concept}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', padding:5, paddingBottom: 15}}>
+                                    <Text>Monto</Text>
+                                    <Text> 
+                                        {this.formatCurrency(this.state.modalData.money)}
+                                    </Text>
+                                </View>
+                            </View>
+                            <Button onPress={this.onEliminatePress} backgroundColor="#E59092" backgroundDarker="#E5DED3">
+                                <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                                    Eliminar
+                                </Text>
+                            </Button>
+                        </View>
+                        }
                     </View>
                 </Modal>
 
-                <View style={{ flex: 0.4, flexDirection:'column', justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ flex: 0.45, flexDirection:'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{flexDirection:'row'}}>
                         <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'center', padding: 20}}>
                             <Text style={{fontWeight:'bold', fontSize:20}}>
@@ -310,13 +373,17 @@ export default class HistoryScreen extends React.Component {
                     <View style={{flexDirection:'row'}}>
                         <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
                             <Text>Balance Inicial</Text>
-                            <Text style="fontWeight:'bold">${this.state.initialBalance}</Text>
+                            <Text style={[ (this.state.initialBalance < 0) ? {fontWeight:'bold', color:'red'} : {fontWeight:'bold'}]}>
+                                {this.formatCurrency(this.state.initialBalance)}
+                            </Text>
                         </View>
                     </View>
                     <View style={{flexDirection:'row'}}>
                         <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
                             <Text>Balance Final</Text>
-                            <Text style="fontWeight:'bold">${this.state.finalBalance}</Text>
+                            <Text style={[ (this.state.finalBalance < 0) ? {fontWeight:'bold', color:'red'} : {fontWeight:'bold'}]}>
+                                {this.formatCurrency(this.state.finalBalance)}
+                            </Text>
                         </View>                        
                     </View>
                     <View style={{flexDirection:'row', paddingTop:16}}>
@@ -324,25 +391,30 @@ export default class HistoryScreen extends React.Component {
                     </View>
                     <View style={{flexDirection:'row', paddingBottom:16}}>
                         <View style={{flex:0.8, flexDirection:'row', justifyContent:"space-between"}}>
-                            <Text>${this.state.totalIncomes}</Text>
-                            <Text>${this.state.totalExpenditures}</Text>
+                            <Text>{this.formatCurrency(this.state.totalIncomes)}</Text>
+                            <Text>{this.formatCurrency(this.state.totalExpenditures)}</Text>
                         </View>
                     </View>
                 </View>            
 
-                <View style={{...styles.container, ...{flex: 0.6}}}>
-                    <Table borderStyle={{borderColor: '#C1C0B9'}}>
+                <View style={{...styles.container, ...{flex: 0.5}}}>
+                    <Table borderStyle={{borderColor: '#C1C0B9', borderRadius: 10, overflow:'hidden'}}>
                         <Row data={state.tableHead} style={styles.head}/>
                         <ScrollView style={styles.dataWrapper}>
                             {
                                 state.tableData.map((rowData, index) => (
                                     <TouchableOpacity key={index} onPress={() => this.showModal(index)}>
-                                        <Row data={rowData} textStyle={styles.text}/>
+                                        <TableWrapper key={index} style={{flexDirection: 'row'}}>
+                                            <Cell key={0} data={rowData[0]} textStyle={styles.text}/>
+                                            <Cell key={1} data={rowData[1]} textStyle={styles.text}/>
+                                            <Cell key={2} data={this.formatCurrency(rowData[2])} 
+                                            textStyle={{...styles.text, ...{textAlign: 'right'}}}/>
+                                        </TableWrapper>
                                     </TouchableOpacity>
                                 ))
                             }
                             { state.tableData.length == 0 &&
-                                <Cell key={0} data="No hay movimientos para el periodo"
+                                <Cell key={0} data="No hay movimientos para este periodo"
                                 textStyle={{fontWeight:'bold', alignSelf: 'center'}}/>
                             }
                             
@@ -355,7 +427,7 @@ export default class HistoryScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+  container: { flex: 1, padding: 10, backgroundColor: '#fff' },
   head: { height: 40, backgroundColor: '#E5DED3'},
   text: { margin: 6 }
 })

@@ -6,7 +6,9 @@ export class StorageService {
     static addMovement = async (key, movement) => {
         try {
             let movements = await StorageService.getMovemements(key);
-            movements.push(movement);
+            movement.id = movements.nextId;
+            movements.nextId++;
+            movements.list.push(movement);
             await AsyncStorage.setItem(key, JSON.stringify(movements));
         } catch (error) {
             console.error("error saving: ",error);
@@ -16,11 +18,21 @@ export class StorageService {
     static getMovemements = async (key) => {
         try {
             const movements = await AsyncStorage.getItem(key);
-            return (movements === null) ? [] : JSON.parse(movements);
+            console.log('movements: ', movements);
+            return (movements == null) ? {nextId: 1, list: []} : JSON.parse(movements);
         } catch (error) {
             console.error("error retrieving: ",error);
         }
     };
+
+    static clearStorage = async (key) => {
+      try {
+          await AsyncStorage.multiRemove(['fixed_income', 'variable_income', 
+                      'fixed_expenditure', 'variable_expenditure']);
+      } catch (error) {
+          console.error('error removing: ', error);
+      }
+    }
 
     static saveFixedIncome = async (income) => {
         await StorageService.addMovement('fixed_income', income);
@@ -31,8 +43,8 @@ export class StorageService {
     };
 
     static getIncomes = async () => {
-        const fixedIncomes = await StorageService.getMovemements('fixed_income');
-        const variableIncomes = await StorageService.getMovemements('variable_income');
+        const fixedIncomes = (await StorageService.getMovemements('fixed_income')).list;
+        const variableIncomes = (await StorageService.getMovemements('variable_income')).list;
         return concat(fixedIncomes, variableIncomes)
     }
 
@@ -45,24 +57,24 @@ export class StorageService {
     };
 
     static getExpenditures = async () => {
-        const fixedExpenditures = await StorageService.getMovemements('fixed_expenditure');
-        const variableExpenditures = await StorageService.getMovemements('variable_expenditure');
+        const fixedExpenditures = (await StorageService.getMovemements('fixed_expenditure')).list;
+        const variableExpenditures = (await StorageService.getMovemements('variable_expenditure')).list;
         return concat(fixedExpenditures, variableExpenditures)
     }
 
     static getIncomesAsVariable = async () => {
-      var variableIncomes= await StorageService.getMovemements('variable_income');
+      var variableIncomes= (await StorageService.getMovemements('variable_income')).list;
       variableIncomes = variableIncomes.map(
           function (income) {
-            return {money: income.money, date: new Date(income.date), category: income.category}
+            return {money: income.money, date: new Date(income.date), category: income.category, concept: income.concept}
           }
       );
-      const fixedIncomes = await StorageService.getMovemements('fixed_income');
+      const fixedIncomes = (await StorageService.getMovemements('fixed_income')).list;
       fixedIncomes.forEach(function (income) {
         let act_date = new Date(income.since);   //esta mierda de adentro es string! ej.: "2018-11-27T03:00:00.000Z"
         const threshold = new Date(income.until)
         while (act_date <= threshold) {
-          variableIncomes.push({money: income.money, date: new Date(act_date.getTime()), category: income.category});
+          variableIncomes.push({money: income.money, date: new Date(act_date.getTime()), category: income.category, concept: income.concept});
           act_date.setMonth(1 + act_date.getMonth()); //possibly buggy: see https://stackoverflow.com/questions/12793045/adding-months-to-a-date-in-javascript
         }
       });
@@ -70,18 +82,18 @@ export class StorageService {
     };
 
     static getExpendituresAsVariable = async () => {
-      var variableExp= await StorageService.getMovemements('variable_expenditure');
+      var variableExp= (await StorageService.getMovemements('variable_expenditure')).list;
       variableExp = variableExp.map(
           function (exp) {
-            return {money: exp.money, date: new Date(exp.date), category: exp.category}
+            return {money: exp.money, date: new Date(exp.date), category: exp.category, concept: exp.concept}
           }
       );
-      const fixedExp = await StorageService.getMovemements('fixed_expenditure');
+      const fixedExp = (await StorageService.getMovemements('fixed_expenditure')).list;
       fixedExp.forEach(function (exp) {
         let act_date = new Date(exp.since);   //esta mierda de adentro es string! ej.: "2018-11-27T03:00:00.000Z"
         const threshold = new Date(exp.until)
         while (act_date <= threshold) {
-          variableExp.push({money: exp.money, date: new Date(act_date.getTime()), category: exp.category});
+          variableExp.push({money: exp.money, date: new Date(act_date.getTime()), category: exp.category, concept: exp.concept});
           act_date.setMonth(1 + act_date.getMonth()); //possibly buggy: see above
         }
       });

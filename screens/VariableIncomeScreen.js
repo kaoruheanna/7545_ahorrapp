@@ -120,7 +120,7 @@ export default class VariableIncomeScreen extends React.Component {
                         <Text style={{fontWeight: 'bold', fontSize: 20}}>Guardar</Text>
                     </Button>
                 </View>
-                <DropdownAlert ref={ref => this.dropdown = ref} />
+                <DropdownAlert successColor='#C5DD99' ref={ref => this.dropdown = ref} />
             </View>
         );
     }
