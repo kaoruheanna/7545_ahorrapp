@@ -21,7 +21,7 @@ export default class HomeScreen extends React.Component {
                     <View style={styles.homeButtonsColumn}>
                         <HomeButton title="Fijos" type="income" screen="FixedIncome" onPress={this.goToScreen}/>
                         <HomeButton title="Variables" type="income" screen="VariableIncome" onPress={this.goToScreen}/>
-                        <HomeButton title="Balanza" type="balance" screen="Balance" onPress={this.goToScreen}/>
+                        <HomeButton title="Balanza" type="balance" screen="History" onPress={this.goToScreen}/>
                     </View>
 
                     <View style={styles.homeButtonsColumn}>

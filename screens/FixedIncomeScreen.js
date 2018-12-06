@@ -1,10 +1,11 @@
 import React from 'react';
-import {Button, View, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import t from 'tcomb-form-native';
 import moment from 'moment';
 import { StorageService } from "../StorageService";
 import cloneDeep from 'lodash/cloneDeep';
 import DropdownAlert from 'react-native-dropdownalert';
+import Button from 'react-native-really-awesome-button/src/themes/rick';
 
 const Form = t.form.Form;
 Form.stylesheet.dateValue.normal.borderColor = '#d0d2d3';
@@ -117,7 +118,9 @@ export default class FixedIncomeScreen extends React.Component {
                         onChange={this.onChange.bind(this)}
                         options={options}
                     />
-                    <Button title="Guardar" onPress={this.onPress} styles={styles.container}/>
+                    <Button style={{alignSelf:'center'}} onPress={this.onPress}>
+                        <Text style={{fontWeight: 'bold', fontSize: 20}}>Guardar</Text>
+                    </Button>
                 </View>
                 <DropdownAlert ref={ref => this.dropdown = ref} />
             </View>

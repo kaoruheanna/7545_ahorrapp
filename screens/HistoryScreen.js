@@ -52,7 +52,7 @@ export default class HistoryScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
         return {
-            title: 'Historial',
+            title: 'Balanza',
             headerRight: (
                 <TouchableOpacity onPress={navigation.getParam('showFilters')}>
                     <View style={{...styles.container, ...{backgroundColor: "#f1f8ff", flex: 1, alignItems: "center", justifyContent: "center"}}}>
