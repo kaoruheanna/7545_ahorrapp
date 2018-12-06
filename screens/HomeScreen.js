@@ -1,13 +1,45 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
+import { Icon } from 'react-native-elements'
+import Modal from "react-native-modal";
 import HomeButton from '../components/HomeButton.js';
 import { StackActions, NavigationActions } from 'react-navigation';
+import {StorageService} from "../StorageService";
+import Button from 'react-native-really-awesome-button/src/themes/rick';
 
 export default class HomeScreen extends React.Component {
 
-    static navigationOptions = {
-        title: 'AhorrApp',
+    static navigationOptions = ({navigation}) => {
+        return {
+            title: 'AhorrApp',
+            headerRight: (
+                <TouchableOpacity onPress={navigation.getParam('showOptions')}>
+                    <View style={{ flex: 1, padding: 10, backgroundColor: "#E5DED3", alignItems: "center", justifyContent: "center"}}>
+                        <Icon name='ellipsis-v' type='font-awesome' color="black" />
+                    </View>
+                </TouchableOpacity>
+            ),            
+        };
     };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            optionsVisible: false,
+        };
+    }
+
+    async componentDidMount() {
+        this.props.navigation.setParams({ showOptions: this.showOptions });
+    }
+
+    showOptions = () => {
+        this.setState({optionsVisible: true});
+    }
+
+    hideOptions() {
+        this.setState({optionsVisible: false});
+    }    
 
     goToScreen = (screenName) => {
         this.props.navigation.navigate(screenName);
@@ -17,6 +49,15 @@ export default class HomeScreen extends React.Component {
 
         return (
             <View style={styles.container}>
+                <Modal isVisible={this.state.optionsVisible} onBackdropPress={() => this.hideOptions()}>
+                    <View style={{ flex: 0.3, borderRadius: 10, flexDirection: 'column', alignItems: 'center', padding: 32, backgroundColor: '#fff' }}>
+                        <Button onPress={StorageService.clearStorage} backgroundColor="#B7ABA5" backgroundDarker="#E5DED3">
+                            <Text style={{fontWeight: 'bold', fontSize: 20}}>
+                                Clear Storage
+                            </Text>
+                        </Button>
+                    </View>
+                </Modal>            
                 <View style={styles.homeButtonsArea}>
                     <View style={styles.homeButtonsColumn}>
                         <HomeButton title="Fijos" type="income" screen="FixedIncome" onPress={this.goToScreen}/>
