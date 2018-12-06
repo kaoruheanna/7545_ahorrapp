@@ -28,6 +28,14 @@ const initState = {
 };
 
 var options = {
+    i18n: {
+        optional: ' (opcional)',
+        required: '',
+        add: 'Add',   // add button
+        remove: '✘',  // remove button
+        up: '↑',      // move up button
+        down: '↓'     // move down button        
+    },    
     fields: {
         money: {
             label: 'Monto',
@@ -107,7 +115,8 @@ export default class VariableIncomeScreen extends React.Component {
                         onChange={this.onChange.bind(this)}
                         options={options}
                     />
-                    <Button style={{alignSelf:'center'}} onPress={this.onPress}>
+                    <Button backgroundColor="#B7ABA5" backgroundDarker="#E5DED3" 
+                    style={{alignSelf:'center'}} onPress={this.onPress}>
                         <Text style={{fontWeight: 'bold', fontSize: 20}}>Guardar</Text>
                     </Button>
                 </View>
