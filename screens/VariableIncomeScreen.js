@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import DrawerComponent from '../components/DrawerComponent.js';
 import t from 'tcomb-form-native';
 import moment from 'moment';
 import { StorageService } from "../StorageService";
@@ -79,7 +80,9 @@ const styles = StyleSheet.create({
 export default class VariableIncomeScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Ingresos variables',
+        drawerLabel: (params) => {
+            return (<DrawerComponent title="Nuevo Ingreso Variable" type="income" focused={params.focused}/>)
+        }
     };
 
     constructor(props) {

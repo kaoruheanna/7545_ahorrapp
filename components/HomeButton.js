@@ -23,7 +23,7 @@ export default class HomeButton extends React.Component {
 
         return (
             <Button
-                width={130}
+                width={280}
                 height={70}
                 backgroundColor={backgroundColor}
                 backgroundDarker="#E5DED3"

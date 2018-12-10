@@ -1,12 +1,15 @@
 import React from 'react';
 import {Button, Text, View, FlatList, StyleSheet} from 'react-native';
+import DrawerComponent from '../components/DrawerComponent.js';
 import {NavigationActions, StackActions} from "react-navigation";
 import {formatItem,getData} from "../components/AdviceGenerator";
 
 export default class AdvicesScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Consejos',
+        drawerLabel: (params) => {
+            return (<DrawerComponent title="Consejos" type="info" focused={params.focused}/>)
+        }
     };
 
     constructor(props){

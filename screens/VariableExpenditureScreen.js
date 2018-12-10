@@ -1,5 +1,6 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import DrawerComponent from '../components/DrawerComponent.js';
 import t from 'tcomb-form-native';
 import moment from 'moment';
 import { StorageService } from "../StorageService";
@@ -83,7 +84,9 @@ const styles = StyleSheet.create({
 export default class VariableExpenditureScreen extends React.Component {
 
     static navigationOptions = {
-        title: 'Gastos variables',
+        drawerLabel: (params) => {
+            return (<DrawerComponent title="Nuevo Gasto Variable" type="expenditure" focused={params.focused}/>)
+        }
     };
 
     constructor(props) {
