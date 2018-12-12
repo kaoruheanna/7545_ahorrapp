@@ -66,7 +66,7 @@ export class StorageService {
       var variableIncomes= (await StorageService.getMovemements('variable_income')).list;
       variableIncomes = variableIncomes.map(
           function (income) {
-            return {money: income.money, date: new Date(income.date), category: income.category, concept: income.concept}
+            return {money: income.money, date: new Date(income.date), category: income.category, concept: income.concept, is_f:false}
           }
       );
       const fixedIncomes = (await StorageService.getMovemements('fixed_income')).list;
@@ -74,7 +74,7 @@ export class StorageService {
         let act_date = new Date(income.since);   //esta mierda de adentro es string! ej.: "2018-11-27T03:00:00.000Z"
         const threshold = new Date(income.until)
         while (act_date <= threshold) {
-          variableIncomes.push({money: income.money, date: new Date(act_date.getTime()), category: income.category, concept: income.concept});
+          variableIncomes.push({money: income.money, date: new Date(act_date.getTime()), category: income.category, concept: income.concept, is_f:true});
           act_date.setMonth(1 + act_date.getMonth()); //possibly buggy: see https://stackoverflow.com/questions/12793045/adding-months-to-a-date-in-javascript
         }
       });
@@ -85,7 +85,7 @@ export class StorageService {
       var variableExp= (await StorageService.getMovemements('variable_expenditure')).list;
       variableExp = variableExp.map(
           function (exp) {
-            return {money: exp.money, date: new Date(exp.date), category: exp.category, concept: exp.concept}
+            return {money: exp.money, date: new Date(exp.date), category: exp.category, concept: exp.concept, is_f:false}
           }
       );
       const fixedExp = (await StorageService.getMovemements('fixed_expenditure')).list;
@@ -93,7 +93,7 @@ export class StorageService {
         let act_date = new Date(exp.since);   //esta mierda de adentro es string! ej.: "2018-11-27T03:00:00.000Z"
         const threshold = new Date(exp.until)
         while (act_date <= threshold) {
-          variableExp.push({money: exp.money, date: new Date(act_date.getTime()), category: exp.category, concept: exp.concept});
+          variableExp.push({money: exp.money, date: new Date(act_date.getTime()), category: exp.category, concept: exp.concept, is_f:true});
           act_date.setMonth(1 + act_date.getMonth()); //possibly buggy: see above
         }
       });

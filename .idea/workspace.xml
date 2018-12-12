@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/components/AdviceGenerator.js" line="100" />
+    <bookmark url="file://$PROJECT_DIR$/components/AdviceGenerator.js" line="139" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="05d5d8e6-7346-45cf-a1e5-66b7b369516d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/StorageService.js" beforeDir="false" afterPath="$PROJECT_DIR$/StorageService.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/AdviceGenerator.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/AdviceGenerator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/AdvicesScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/AdvicesScreen.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -23,20 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/BalanceScreen.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2310">
-              <caret line="159" column="30" selection-start-line="159" selection-start-column="30" selection-end-line="159" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/components/AdviceGenerator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="564">
-              <caret line="85" column="6" selection-start-line="85" selection-start-column="6" selection-end-line="85" selection-end-column="6" />
+            <state relative-caret-position="-495">
+              <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -47,8 +38,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screens/AdvicesScreen.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+            <state relative-caret-position="450">
+              <caret line="34" selection-start-line="34" selection-end-line="34" />
               <folding>
                 <element signature="e#0#26#0" expanded="true" />
               </folding>
@@ -71,6 +62,7 @@
       <find>@expo</find>
       <find>styles</find>
       <find>clon</find>
+      <find>Locale</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -96,10 +88,10 @@
         <option value="$PROJECT_DIR$/screens/VariableIncomeScreen.js" />
         <option value="$PROJECT_DIR$/screens/VariableExpenditureScreen.js" />
         <option value="$PROJECT_DIR$/App.js" />
-        <option value="$PROJECT_DIR$/StorageService.js" />
         <option value="$PROJECT_DIR$/screens/BalanceScreen.js" />
         <option value="$PROJECT_DIR$/app.json" />
         <option value="$PROJECT_DIR$/screens/AdvicesScreen.js" />
+        <option value="$PROJECT_DIR$/StorageService.js" />
         <option value="$PROJECT_DIR$/components/AdviceGenerator.js" />
       </list>
     </option>
@@ -190,12 +182,15 @@
       <workItem from="1543784403857" duration="4509000" />
       <workItem from="1543877409799" duration="195000" />
       <workItem from="1544049323383" duration="9660000" />
-      <workItem from="1544116321275" duration="2249000" />
+      <workItem from="1544116321275" duration="2963000" />
+      <workItem from="1544543224944" duration="599000" />
+      <workItem from="1544635430751" duration="11767000" />
+      <workItem from="1544653509899" duration="2319000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="76484000" />
+    <option name="totallyTimeSpent" value="91883000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="52" y="-11" width="1229" height="1036" extended-state="6" />
@@ -356,16 +351,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/StorageService.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="69" selection-start-line="18" selection-start-column="69" selection-end-line="18" selection-end-column="69" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/VariableExpenditureScreen.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="273">
@@ -373,13 +358,6 @@
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/BalanceScreen.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2310">
-          <caret line="159" column="30" selection-start-line="159" selection-start-column="30" selection-end-line="159" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -393,10 +371,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/HistoryScreen.js">
+    <entry file="file://$PROJECT_DIR$/screens/HistoryScreen.js" />
+    <entry file="file://$PROJECT_DIR$/screens/BalanceScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1500">
-          <caret line="130" selection-start-line="130" selection-end-line="130" />
+        <state relative-caret-position="15">
+          <caret line="169" column="30" selection-start-line="169" selection-start-column="30" selection-end-line="169" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/StorageService.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="95" column="36" lean-forward="true" selection-start-line="95" selection-start-column="36" selection-end-line="95" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/AdviceGenerator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-495">
+          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
@@ -405,18 +401,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/AdvicesScreen.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-          <folding>
-            <element signature="e#0#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/AdviceGenerator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="564">
-          <caret line="85" column="6" selection-start-line="85" selection-start-column="6" selection-end-line="85" selection-end-column="6" />
+        <state relative-caret-position="450">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
           <folding>
             <element signature="e#0#26#0" expanded="true" />
           </folding>
