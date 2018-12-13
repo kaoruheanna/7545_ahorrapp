@@ -58,10 +58,6 @@ function advices(incs,exps) {
       (acum, mov) => {return acum + mov.money;}, 0);
   let dif = next_month_balance + this_month_balance;
 
-  //console.log("este mes: "+this_month_balance); //debug
-  //console.log("sig mes: "+next_month_balance); //debug
-  //console.log("dif: "+dif); //debug
-
   //superavit este mes y el que viene
   if (this_month_balance > 0 && next_month_balance > 0){
     advs.push({cat: BAL, msg: 'parece que estás teniendo un balance positivo a corto plazo, pensaste' +
@@ -93,11 +89,11 @@ function advices(incs,exps) {
     if (dif > 0) {
       advs.push({cat: BAL, msg: 'El mes que viene pareciera cerrar en baja, pero no hay por qué alarmarse! '+
             'Guardando $'+ (-next_month_balance) + ' de los $'+this_month_balance+ ' que debieran quedarte' +
-            ' este mes, estarías bien.'});
+            ' este mes, estarías bien'});
     }
     else{
       advs.push({cat:BAL,msg:'El mes que viene es un poco más complicado, tal vez quieras ahorrar todo lo' +
-            ' posible éste para afrontarlo mejor.'});
+            ' posible éste para afrontarlo mejor'});
     }
   }
 
@@ -114,27 +110,10 @@ function advices(incs,exps) {
     );
     advs.push({cat:WRN,msg:'tu próximo gasto fijo este mes es de $'+next_fixed_exp.money+ " en "+
           next_fixed_exp.category +" el " + dia_y_num(next_fixed_exp.date)});
-    /**/
-    /*
-    const max_exp = exps.reduce(
-        (carry, exp) => {
-          return (carry.money > exp.money) ? carry : exp;
-        }
-    );
-    /*
-    advs.push({cat: 'warning',
-               msg: 'tu máximo gasto es de $'+max_exp.money + ' el '+.dia_y_num(max_exp.date)});
-    */
   }
 
-  //FILLERS Y OTROS TEXTOS
-  /*advs.push({
-    cat: "filler", msg: 'texto largo largo largo largo largo largo largo largo largo largo largo largo '+
-        'largolargolargo' + 'largolargolargo'+ 'largolargolargo'+'largolargolargo'+'largolargolargo'+
-        'largolargolargo'+'largolargolargo'+'largolargolargo'+'largolargolargo'+'largolargolargo'
-  });
-  advs.push({cat: "filler", msg: 'y ahora uno corto'} );
-  */
+  //EXTRAS
+
 
   return advs;
 }
