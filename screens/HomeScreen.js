@@ -56,7 +56,7 @@ export default class HomeScreen extends React.Component {
                     <View style={{ flex: 0.3, borderRadius: 10, flexDirection: 'column', alignItems: 'center', padding: 32, backgroundColor: '#fff' }}>
                         <Button onPress={StorageService.clearStorage} backgroundColor="#B7ABA5" backgroundDarker="#E5DED3">
                             <Text style={{fontWeight: 'bold', fontSize: 20}}>
-                                Clear Storage
+                                Limpiar Datos
                             </Text>
                         </Button>
                     </View>
