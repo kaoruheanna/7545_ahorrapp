@@ -12,8 +12,7 @@ import Button from 'react-native-really-awesome-button/src/themes/rick';
 import numbro from "numbro";
 import DropdownAlert from 'react-native-dropdownalert';
 
-const MIN_FLEX = 0.25;
-const MAX_FLEX = 1 - MIN_FLEX;
+const PERCENTAGE_VALUES = [0.1, 0.35, 0.5, 0.65, 0.9];
 const LOADING_TIME = 1000;
 
 numbro.setLanguage('es-AR');
@@ -190,8 +189,9 @@ export default class BalanceScreen extends React.Component {
         let incomePercentage = 0.5;
         if (total > 0) {
             incomePercentage = totalIncomes / total;
-            incomePercentage = Math.max(incomePercentage, MIN_FLEX);
-            incomePercentage = Math.min(incomePercentage, MAX_FLEX);
+            incomePercentage = PERCENTAGE_VALUES.reduce(function(carry, curr) {
+              return (Math.abs(curr - incomePercentage) < Math.abs(carry - incomePercentage) ? curr : carry);
+            });
         }
 
         this.setState({
@@ -306,6 +306,7 @@ export default class BalanceScreen extends React.Component {
         return (
             <View style={{ flex: 1, backgroundColor: '#fff' }}>
                 <DropdownAlert successColor='#C5DD99' closeInterval={2000} ref={ref => this.dropdown = ref} />
+
                 <Modal isVisible={state.isLoading}>
                     <ActivityIndicator animating={true} size="large" style={{ flex: 1, 
                     alignItems: 'center', justifyContent: 'center', height: 80 }}/>
@@ -385,35 +386,47 @@ export default class BalanceScreen extends React.Component {
                             </Text>
                         </View>
                     </View>                
-                    <View style={{flexDirection:'row'}}>
-                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
-                            <Text>Balance Inicial</Text>
-                            <Text style={[ (state.initialBalance < 0) ? {fontWeight:'bold', color:'red'} : {fontWeight:'bold'}]}>
+                    <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+                        <View style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding:5}}>
+                            <Text style={{fontWeight:'bold', fontSize:20}}>Balance Inicial</Text>
+                            <Text style={[ (state.initialBalance < 0) ? 
+                                {fontWeight:'bold', color:'red', fontSize:20} : 
+                                {fontWeight:'bold', fontSize:20}]
+                            }>
                                 {this.formatCurrency(state.initialBalance)}
                             </Text>
                         </View>
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        <View style={{flex: 0.9, flexDirection: 'row', justifyContent: 'space-between', padding:5}}>
-                            <Text>Balance Final</Text>
-                            <Text style={[ (state.finalBalance < 0) ? {fontWeight:'bold', color:'red'} : {fontWeight:'bold'}]}>
+                        <View style={{flex: 0.5, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding:5}}>
+                            <Text style={{fontWeight:'bold', fontSize:20}}>Balance Final</Text>
+                            <Text style={[ (state.finalBalance < 0) ? 
+                                {fontWeight:'bold', color:'red', fontSize:20} : 
+                                {fontWeight:'bold', fontSize:20}]
+                            }>
                                 {this.formatCurrency(state.finalBalance)}
                             </Text>
                         </View>                        
                     </View>
-                    <View style={{flexDirection:'row', paddingTop:16}}>
-                        <Progress.Bar style={{flex:0.9}} progress={state.incomePercentage} color='#C5DD99' unfilledColor = '#E59092' width={null} height={30} borderRadius={10}/>
-                    </View>
-                    <View style={{flexDirection:'row', paddingBottom:16}}>
-                        <View style={{flex:0.8, flexDirection:'row', justifyContent:"space-between"}}>
-                            <Text>{this.formatCurrency(state.totalIncomes)}</Text>
-                            <Text>{this.formatCurrency(state.totalExpenditures)}</Text>
+                    <View style={{flexDirection:'row', paddingTop:16, paddingBottom:16, justifyContent: 'center', alignItems: 'center'}}>
+                        <Progress.Bar style={{flex:0.9}} 
+                        progress={state.incomePercentage} 
+                        color='#C5DD99' 
+                        unfilledColor='#E59092'
+                        borderColor='black'
+                        width={null} 
+                        height={30} 
+                        borderRadius={10}/>
+                        <View style={{width: '85%', position: 'absolute'}}>
+                            <View style={{flexDirection:'row', justifyContent:'space-between', alignItems: 'center'}}>
+                                <Text>{this.formatCurrency(state.totalIncomes)}</Text>
+                                <Text style={{fontWeight: 'bold', fontSize: 36, paddingBottom: 8}}> | </Text>
+                                <Text>{this.formatCurrency(state.totalExpenditures)}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>            
 
                 <View style={{...styles.container, ...{flex: 0.5}}}>
-                    <Table borderStyle={{borderColor: '#C1C0B9', borderRadius: 10, overflow:'hidden'}}>
+                    <Table borderStyle={{borderColor: 'black', borderRadius: 10, overflow:'hidden'}}>
                         <Row data={state.tableHead} style={styles.head}/>
                         <ScrollView style={styles.dataWrapper}>
                             {
