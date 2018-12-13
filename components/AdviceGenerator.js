@@ -2,6 +2,10 @@ import React from 'react';
 import {StorageService} from "../StorageService";
 import cloneDeep from 'lodash/cloneDeep';
 
+let BAL = 'Balance';
+let WRN = 'Atención';
+let TXT = 'A Saber';
+
 module.exports = {
 
   formatItem: (item) => {
@@ -12,7 +16,7 @@ module.exports = {
 module.exports.getData = async () => {
   const incs = await StorageService.getIncomesAsVariable();
   const exps = await StorageService.getExpendituresAsVariable();
-  return [].concat(advBalance(incs,exps),advWarning(exps),fillerWarning());
+  return advices(incs,exps);
 };
 
 function in_next_n_month(date,n) {
@@ -25,9 +29,23 @@ function in_next_n_month(date,n) {
   return  date > max_day_last_month && date <= max_day_this_month;
 }
 
-function advBalance(incs,exps) {
+function dia_y_num(date) {
+  let str = "";
+  switch (date.getDay()) {
+    case 0: str = "domingo ";break;
+    case 1: str = "lunes ";break;
+    case 2: str = "martes ";break;
+    case 3: str = "miércoles ";break;
+    case 4: str = "jueves ";break;
+    case 5: str = "viernes ";break;
+    case 6: str = "sábado ";break;
+  }
+  return str+date.getDate();
+}
+function advices(incs,exps) {
+
+  //BALANCE
   let advs = [];
-  //advs.push({cat: 'balance', msg: 'estas gastando mucho'});
   let movs = incs.concat(cloneDeep(exps).map(  (exp) => {
     exp.money = - exp.money;
     return exp;})
@@ -39,20 +57,22 @@ function advBalance(incs,exps) {
   let next_month_balance = next_month_movs.reduce(
       (acum, mov) => {return acum + mov.money;}, 0);
   let dif = next_month_balance + this_month_balance;
+
   //console.log("este mes: "+this_month_balance); //debug
   //console.log("sig mes: "+next_month_balance); //debug
   //console.log("dif: "+dif); //debug
+
   //superavit este mes y el que viene
   if (this_month_balance > 0 && next_month_balance > 0){
-    advs.push({cat: 'balance', msg: 'parece que estás teniendo un balance positivo a corto plazo, pensaste' +
+    advs.push({cat: BAL, msg: 'parece que estás teniendo un balance positivo a corto plazo, pensaste' +
           ' en invertir? Una buena opción es: comprar dólares'});
   }
   //deficit este mes cancelable con el que viene
   if (this_month_balance < 0 && dif >0){
-    advs.push({cat:'balance', msg: 'si bien este mes está difícil, tranquilo: el mes que viene vas a poder' +
-          'cancelar tus deudas y te va a quedar un sobrante de $' + dif});
+    advs.push({cat:BAL, msg: 'si bien este mes está difícil, tranquilo: el siguiente deberías poder' +
+          'cancelar tus deudas y que te quede un sobrante de $' + dif});
   }
-  // deficit este mes y el que viene
+  // deficit este mes
   if (this_month_balance < 0){
     let max_exp = this_month_movs.reduce( (ant,mov) => {
       if (mov.money > ant.money){
@@ -63,18 +83,39 @@ function advBalance(incs,exps) {
     if (max_exp.money < 0){
       let cat = max_exp.category;
       let money = - max_exp.money;
-      advs.push({cat: 'balance', msg: 'Este mes tenés un gasto de $'+money+" en "+cat+", quizás quieras" +
+      advs.push({cat: BAL, msg: 'Este mes tenés un gasto de $'+money+" en "+cat+", quizás quieras" +
             " cancelarlo primero para que no se acumule"})
     }
-
   }
-  return advs;
-}
+  //superavit este mes y deficit el que viene
+  if (this_month_balance > 0 && next_month_balance < 0){
+    //si llega a salvarse con lo de este mes
+    if (dif > 0) {
+      advs.push({cat: BAL, msg: 'El mes que viene pareciera cerrar en baja, pero no hay por qué alarmarse! '+
+            'Guardando $'+ (-next_month_balance) + ' de los $'+this_month_balance+ ' que debieran quedarte' +
+            ' este mes, estarías bien.'});
+    }
+    else{
+      advs.push({cat:BAL,msg:'El mes que viene es un poco más complicado, tal vez quieras ahorrar todo lo' +
+            ' posible éste para afrontarlo mejor.'});
+    }
+  }
 
-function advWarning(exps) {
-  let advs = [];
-  //advs.push({cat: 'warning', msg: 'del 7-11 al 10-12 tenes un gasto de $1200'});
-  if (exps.length) {
+  //VALORES PUNTUALES
+  let fixed_exps_this_month = exps.filter( (exp) => {return exp.is_f && in_next_n_month(exp.date, 0);} );
+  let today = new Date();
+  console.log(fixed_exps_this_month);//debug
+  let next_fixed_exps = fixed_exps_this_month.filter( (fexp) => {return fexp.date > today;});
+  if (next_fixed_exps.length) {
+    let next_fixed_exp = next_fixed_exps.reduce(
+        (ant, fexp) => {
+          return (ant.date || new Date(2099,1,1)) > fexp.date ? fexp : ant;
+        }
+    );
+    advs.push({cat:WRN,msg:'tu próximo gasto fijo este mes es de $'+next_fixed_exp.money+ " en "+
+          next_fixed_exp.category +" el " + dia_y_num(next_fixed_exp.date)});
+    /**/
+    /*
     const max_exp = exps.reduce(
         (carry, exp) => {
           return (carry.money > exp.money) ? carry : exp;
@@ -82,14 +123,11 @@ function advWarning(exps) {
     );
     /*
     advs.push({cat: 'warning',
-               msg: 'tu máximo gasto es de $'+max_exp.money + ' el '+max_exp.date.toLocaleDateString('es-AR')});
+               msg: 'tu máximo gasto es de $'+max_exp.money + ' el '+.dia_y_num(max_exp.date)});
     */
   }
-  return advs;
-}
 
-function fillerWarning() {
-  let advs = [];
+  //FILLERS Y OTROS TEXTOS
   /*advs.push({
     cat: "filler", msg: 'texto largo largo largo largo largo largo largo largo largo largo largo largo '+
         'largolargolargo' + 'largolargolargo'+ 'largolargolargo'+'largolargolargo'+'largolargolargo'+
@@ -97,5 +135,6 @@ function fillerWarning() {
   });
   advs.push({cat: "filler", msg: 'y ahora uno corto'} );
   */
+
   return advs;
 }
