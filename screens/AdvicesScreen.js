@@ -21,11 +21,21 @@ export default class AdvicesScreen extends React.Component {
 
 
     async componentDidMount() {
-      return getData().then(
-          (data) => {
-            this.setState({ //recordar que re-renderea cada vez que se llama a setState
-              data:  data});
-          })
+      return 
+    }
+
+
+    async componentDidMount() {
+        this.focusListener = this.props.navigation.addListener('willFocus', () => {
+            getData().then( (data) => {
+                this.setState({ //recordar que re-renderea cada vez que se llama a setState
+                    data:  data});
+            });
+        });
+    }
+
+    async componentWillMount() {
+        if (this.focusListener) this.focusListener.remove();
     }
 
 
